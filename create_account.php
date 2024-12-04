@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-bottom: 10px;
         }
 
-        /* Link back to Sign In styling */
+        /* Create Account section styling */
         .create-account {
             margin-top: 20px;
             font-size: 14px;
@@ -180,9 +180,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <input type="password" name="confirm_password" id="confirm_password" required>
 
     <button type="submit">Create Account</button>
-</form>
 
-<p class="create-account">Already have an account? <a href="sign_in.php">Sign In</a></p> <!-- Link back to Sign In -->
+    <div class="create-account">
+        <p>Already have an account? <a href="sign_in.php">Sign In</a></p>
+    </div>
+</form>
 
 </body>
 </html>
