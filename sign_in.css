@@ -1,6 +1,6 @@
 /* General body styling */
 body {
-    background-color: white;
+    background-color: #f4f4f4;
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
@@ -13,13 +13,12 @@ body {
 form {
     background-color: #fff;
     padding: 30px;
-    border: 1px solid #ccc; /* Added border */
+    border: 1px solid #ccc; /* Added border around form */
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Shadow to make form stand out */
     width: 100%;
     max-width: 400px;
     text-align: center;
-    margin-top: 50px; /* Added top margin */
 }
 
 /* Form title styling */
@@ -46,9 +45,11 @@ input[type="password"] {
     border-radius: 5px;
     font-size: 16px;
     outline: none;
-    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Focused input fields styling */
 input[type="email"]:focus,
 input[type="password"]:focus {
     border-color: #0056b3;
@@ -59,7 +60,7 @@ input[type="password"]:focus {
 button[type="submit"] {
     width: 100%;
     padding: 14px;
-    background-color: red;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
@@ -69,7 +70,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #003d7a;
+    background-color: #0056b3;
 }
 
 /* Error message styling */
@@ -99,9 +100,8 @@ p {
 /* Media query for responsiveness */
 @media only screen and (max-width: 430px) {
     form {
-        background-color: rgb(255, 255, 255);
         width: 90%;
-        padding: 15px;
+        padding: 20px;
         margin-top: 20px;
     }
 
@@ -118,14 +118,5 @@ p {
     button[type="submit"] {
         padding: 12px;
         font-size: 16px;
-    }
-
-    .create-account {
-        margin-top: 15px;
-        font-size: 12px;
-    }
-
-    .create-account a {
-        font-size: 14px;
     }
 }
