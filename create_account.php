@@ -77,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             color: #555;
             margin-bottom: 8px;
             display: block;
+            margin-left: 10px;
         }
 
         input[type="email"],
