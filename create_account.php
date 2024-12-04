@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Shadow to make form stand out */
             width: 100%;
             max-width: 400px;
-            text-align: center;
+            text-align: left; /* Align text to the left */
         }
 
         /* Form title styling */
@@ -69,15 +69,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             color: #333;
             margin-bottom: 20px;
             font-weight: 600;
+            text-align: center; /* Center the title */
         }
 
-        /* Input fields styling */
+        /* Label and input container styling */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
         label {
             font-size: 14px;
             color: #555;
             margin-bottom: 8px;
-            display: block;
-            margin-left: -100px;
+            display: inline-block;
         }
 
         input[type="email"],
@@ -88,7 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 5px;
             font-size: 16px;
             outline: none;
-            margin-bottom: 15px;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -170,15 +175,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <form action="create_account.php" method="POST">
     <h2>Create Account</h2>
     <?php if (isset($error)) echo "<p>$error</p>"; ?>
-    
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email" required>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required>
+    </div>
 
-    <label for="confirm_password">Confirm Password</label>
-    <input type="password" name="confirm_password" id="confirm_password" required>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+    </div>
+
+    <div class="form-group">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" name="confirm_password" id="confirm_password" required>
+    </div>
 
     <button type="submit">Create Account</button>
 
