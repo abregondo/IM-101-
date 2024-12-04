@@ -163,9 +163,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <input type="password" name="password" id="password" required>
 
     <button type="submit">Sign In</button>
-</form>
 
-<p class="create-account">Don't have an account? <a href="create_account.php">Create Account</a></p> <!-- Create Account link -->
+    <p class="create-account">Don't have an account? <a href="create_account.php">Create Account</a></p> <!-- Create Account link inside the form -->
+</form>
 
 </body>
 </html>
