@@ -90,6 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         input[type="password"] {
             width: 100%;
             padding: 12px;
+            margin-left: 15px; /* Equal left margin */
+            margin-right: 15px; /* Equal right margin */
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
