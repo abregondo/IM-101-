@@ -8,8 +8,8 @@ if (isset($_POST['search_term'])) {
     $search_query = $_POST['search_term'];
 }
 
-// Query to search users by name or email
-$sql = "SELECT id, email, profile_picture, name FROM users WHERE name LIKE :search_query OR email LIKE :search_query";
+// Query to search users by username or email (use the correct column name)
+$sql = "SELECT id, email, profile_picture, username FROM users WHERE username LIKE :search_query OR email LIKE :search_query";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['search_query' => '%' . $search_query . '%']);
 $search_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -52,7 +52,7 @@ $search_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="result-item">
                             <div class="user-profile">
                                 <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture" class="profile-img">
-                                <strong><?= htmlspecialchars($user['name']) ?></strong>
+                                <strong><?= htmlspecialchars($user['username']) ?></strong>
                             </div>
                             <p class="user-email"><?= htmlspecialchars($user['email']) ?></p>
                         </div>
