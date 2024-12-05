@@ -11,15 +11,25 @@ if (!isset($_SESSION['user_id'])) {
 // Fetch current user ID
 $user_id = $_SESSION['user_id'];
 
-// Fetch two specific friends (change the IDs based on your test users)
-$friend_ids = [2, 3];  // Example: Friend IDs to display. Change these to real ones.
-
-$sql_friends = "SELECT id, email, profile_picture FROM users WHERE id IN (" . implode(',', $friend_ids) . ")";
+// Fetch friends of the current user (those who have accepted the friend request)
+$sql_friends = "SELECT u.id, u.email, u.profile_picture FROM users u 
+                JOIN friends f ON (f.user_id = u.id OR f.friend_id = u.id) 
+                WHERE (f.user_id = :user_id OR f.friend_id = :user_id) AND f.status = 'accepted' 
+                AND u.id != :user_id";
 $stmt_friends = $pdo->prepare($sql_friends);
-$stmt_friends->execute();
+$stmt_friends->execute(['user_id' => $user_id]);
 $friends_result = $stmt_friends->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch current user's friends and follow status
+// Fetch pending friend requests for the current user
+$sql_pending_requests = "SELECT u.id, u.email, u.profile_picture FROM users u 
+                         JOIN friends f ON (f.user_id = u.id OR f.friend_id = u.id)
+                         WHERE (f.user_id = :user_id OR f.friend_id = :user_id) AND f.status = 'pending' 
+                         AND u.id != :user_id";
+$stmt_pending_requests = $pdo->prepare($sql_pending_requests);
+$stmt_pending_requests->execute(['user_id' => $user_id]);
+$pending_requests_result = $stmt_pending_requests->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch current user's follow status
 $sql_user_friends = "SELECT friend_id, status FROM friends WHERE user_id = :user_id OR friend_id = :user_id";
 $stmt_user_friends = $pdo->prepare($sql_user_friends);
 $stmt_user_friends->execute(['user_id' => $user_id]);
@@ -82,18 +92,51 @@ if (isset($_POST['follow_user'])) {
 
   <!-- Friends Section -->
   <div class="feed">
-    <h2>Friends (Add or Follow)</h2>
+    <h2>Your Friends</h2>
     <?php foreach ($friends_result as $friend) { ?>
       <div class="user-profile">
         <img src="<?= $friend['profile_picture'] ?>" alt="User" class="user-avatar">
         <strong><?= $friend['email'] ?></strong>
 
         <form action="home.php" method="POST">
+          <p>You are friends!</p>
+        </form>
+      </div>
+    <?php } ?>
+
+    <h2>Pending Friend Requests</h2>
+    <?php foreach ($pending_requests_result as $friend) { ?>
+      <div class="user-profile">
+        <img src="<?= $friend['profile_picture'] ?>" alt="User" class="user-avatar">
+        <strong><?= $friend['email'] ?></strong>
+
+        <form action="home.php" method="POST">
+          <p>Friend request pending...</p>
+        </form>
+      </div>
+    <?php } ?>
+
+    <h2>Other Users</h2>
+    <?php 
+      // Fetch other users who are not yet friends
+      $sql_other_users = "SELECT id, email, profile_picture FROM users WHERE id != :user_id";
+      $stmt_other_users = $pdo->prepare($sql_other_users);
+      $stmt_other_users->execute(['user_id' => $user_id]);
+      $other_users = $stmt_other_users->fetchAll(PDO::FETCH_ASSOC);
+
+      foreach ($other_users as $user) {
+    ?>
+      <div class="user-profile">
+        <img src="<?= $user['profile_picture'] ?>" alt="User" class="user-avatar">
+        <strong><?= $user['email'] ?></strong>
+
+        <form action="home.php" method="POST">
           <?php
-          // Check if the current user and friend are already connected
+          // Check if the current user has already sent a friend request or is already friends
           $is_friend = false;
+          $request_pending = false;
           foreach ($current_user_friends as $user_friend) {
-              if ($user_friend['friend_id'] == $friend['id'] || $user_friend['friend_id'] == $friend['id']) {
+              if ($user_friend['friend_id'] == $user['id'] || $user_friend['friend_id'] == $user['id']) {
                   $is_friend = true;
                   break;
               }
@@ -102,10 +145,8 @@ if (isset($_POST['follow_user'])) {
           if ($is_friend) {
               echo "<p>You are friends!</p>";
           } else {
-              // Check if the user has already sent a friend request
-              $request_pending = false;
               foreach ($current_user_friends as $user_friend) {
-                  if (($user_friend['friend_id'] == $friend['id'] || $user_friend['friend_id'] == $friend['id']) && $user_friend['status'] == 'pending') {
+                  if (($user_friend['friend_id'] == $user['id'] || $user_friend['friend_id'] == $user['id']) && $user_friend['status'] == 'pending') {
                       $request_pending = true;
                       break;
                   }
@@ -115,7 +156,7 @@ if (isset($_POST['follow_user'])) {
                   echo "<p>Friend request pending...</p>";
               } else {
                   echo '<button type="submit" name="send_friend_request" value="1" style="background-color: #4CAF50;">Send Friend Request</button>';
-                  echo '<input type="hidden" name="friend_id" value="' . $friend['id'] . '">';
+                  echo '<input type="hidden" name="friend_id" value="' . $user['id'] . '">';
               }
           }
           ?>
@@ -124,7 +165,7 @@ if (isset($_POST['follow_user'])) {
         <!-- Follow Button -->
         <form action="home.php" method="POST">
           <button type="submit" name="follow_user" value="1">Follow</button>
-          <input type="hidden" name="followed_id" value="<?= $friend['id'] ?>">
+          <input type="hidden" name="followed_id" value="<?= $user['id'] ?>">
         </form>
       </div>
     <?php } ?>
