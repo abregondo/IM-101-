@@ -7,8 +7,8 @@
   }
   
   body {
-    background-color: #000; /* Black background */
-    color: #fff; /* White text */
+    background-color: #000; 
+    color: #fff; 
     padding: 20px;
   }
   
@@ -18,23 +18,22 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #111; /* Dark grey background */
+    background-color: #111;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   }
   
   .header-left h1 {
     font-size: 24px;
-    color: #fff; /* White text */
+    color: #fff; 
   }
   
-  /* Remove border from notification and message buttons */
   .header-right button {
     background: none;
-    border: none; /* Border removed */
+    border: none; 
     padding: 8px 15px;
     cursor: pointer;
     margin-left: 10px;
-    color: #fff; /* White icon buttons */
+    color: #fff; 
   }
   
   .header-right button:hover {
@@ -81,7 +80,7 @@
   }
   
   .post {
-    background: #222; /* Dark background for posts */
+    background: #222;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
@@ -118,14 +117,14 @@
   .post-actions button {
     background: none;
     border: none;
-    color: #0073e6; /* Light blue color for buttons */
+    color: #0073e6; 
     font-size: 16px;
     cursor: pointer;
     margin-right: 10px;
   }
   
   .post-actions button:hover {
-    color: #fff; /* Change to white when hovered */
+    color: #fff; 
   }
   
   .post-stats {
@@ -135,19 +134,19 @@
   /* Comment section styles */
   .comment-section {
     margin-top: 10px;
-    max-height: 300px; /* Limit the height of the comments section */
-    overflow-y: auto; /* Make comments scrollable */
-    padding-right: 10px; /* Ensure smooth scrolling */
+    max-height: 300px; 
+    overflow-y: auto; 
+    padding-right: 10px; 
     
     /* Firefox styles */
-    scrollbar-width: thin; /* Reduce scrollbar size */
-    scrollbar-color: transparent transparent; /* Transparent scrollbar */
+    scrollbar-width: thin; 
+    scrollbar-color: transparent transparent;
   }
   
   /* Chrome, Safari, Edge */
   .comment-section::-webkit-scrollbar {
-    width: 0px; /* Remove the scrollbar width */
-    background: transparent; /* Remove the scrollbar background */
+    width: 0px; 
+    background: transparent; 
   }
   
   .comment-section::-webkit-scrollbar-thumb {
@@ -243,33 +242,32 @@
   footer {
     display: flex;
     justify-content: space-around;
-    padding: 10px 0; /* Adjusted padding to ensure full width */
-    background-color: #111; /* Dark background for navbar */
+    padding: 10px 0; 
+    background-color: #111; 
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
     position: fixed;
-    width: 100%; /* Ensures the navbar spans full width */
+    width: 100%; 
     bottom: 0;
-    left: 0; /* Ensures navbar aligns with left edge */
-    right: 0; /* Ensures navbar aligns with right edge */
+    left: 0; 
+    right: 0; 
   }
   
   footer button {
-    font-size: 24px; /* Larger icons */
+    font-size: 24px; 
     padding: 10px;
     background: none;
-    border: none; /* Border removed */
+    border: none; 
     cursor: pointer;
-    color: #fff; /* White icons */
+    color: #fff; 
     transition: background-color 0.3s ease;
   }
   
   footer button:hover {
-    background-color: #333; /* Hover effect */
+    background-color: #333; 
   }
   
   /* Media Query for Smaller Screens */
   @media (max-width: 430px) {
-    /* Header Layout for Mobile */
     header {
         flex-direction: column;
         align-items: flex-start;
@@ -286,8 +284,6 @@
         justify-content: space-between;
         margin-top: 10px;
     }
-  
-    /* Footer - Adjust Navbar layout for smaller screens */
     footer {
         flex-direction: column;
         padding: 15px;
@@ -295,7 +291,7 @@
   
     footer button {
         margin-bottom: 10px;
-        font-size: 30px; /* Larger icons for better tap targets */
+        font-size: 30px; 
     }
   
     footer button:last-child {
