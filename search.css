@@ -7,15 +7,19 @@
   
   body {
     font-family: Arial, sans-serif;
-    background-color: #fafafa;
+    background-color: #000; /* Black background */
+    color: #fff; /* White text */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures the page takes up full height */
   }
   
   header {
     display: flex;
     justify-content: space-between;
     padding: 20px;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
+    background-color: #333; /* Dark header background */
+    border-bottom: 1px solid #444;
   }
   
   .app-name {
@@ -28,6 +32,7 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
+    color: #fff;
   }
   
   /* Search Section */
@@ -48,10 +53,12 @@
   .search-form input[type="text"] {
     width: 80%;
     padding: 10px 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #444;
     border-radius: 50px;
     font-size: 16px;
     outline: none;
+    color: #fff;
+    background-color: #222;
   }
   
   .search-form button {
@@ -61,6 +68,7 @@
     background-color: transparent;
     font-size: 24px;
     cursor: pointer;
+    color: #fff;
   }
   
   /* Search Results */
@@ -69,11 +77,11 @@
   }
   
   .result-item {
-    background-color: #fff;
+    background-color: #222;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   }
   
   .user-profile {
@@ -90,7 +98,7 @@
   
   strong {
     font-size: 16px;
-    color: #333;
+    color: #fff;
   }
   
   .post-content {
@@ -108,8 +116,16 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #fff;
+    background-color: #333;
     padding: 10px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #444;
+    margin-top: auto; /* Pushes footer to the bottom */
+  }
+  
+  footer a button {
+    font-size: 24px;
+    color: #fff;
+    background-color: transparent;
+    border: none;
   }
   
