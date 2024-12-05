@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('db.php'); // Make sure you have a file for DB connection
+include('db.php'); // Include the database connection
 
 // Ensure user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -13,26 +13,73 @@ if (isset($_POST['create_post'])) {
     $post_content = $_POST['post_content'];
     $user_id = $_SESSION['user_id'];
 
-    // Check if the post content already exists for the user to avoid duplicates
-    $check_post_stmt = $pdo->prepare("SELECT * FROM posts WHERE content = ? AND user_id = ?");
-    $check_post_stmt->execute([$post_content, $user_id]);
-    $existing_post = $check_post_stmt->fetch();
+    // Check if the post already exists (to prevent duplicates)
+    $check_post = $pdo->prepare("SELECT * FROM posts WHERE content = :content AND user_id = :user_id");
+    $check_post->execute(['content' => $post_content, 'user_id' => $user_id]);
 
-    if (!$existing_post) {
-        // Insert the new post into the database
+    if ($check_post->rowCount() == 0) {
+        // Insert the new post into the database if not a duplicate
         $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
         $stmt = $pdo->prepare($insert_post);
         $stmt->execute(['user_id' => $user_id, 'content' => $post_content]);
-
-        // Redirect after post submission to prevent resubmission on refresh
-        header("Location: home.php");
-        exit();
     } else {
-        echo "<p>This post already exists. Please create a unique post.</p>";
+        echo "<p>You have already posted this content.</p>";
     }
 }
 
-// Fetch all users to display them and allow following
+// Delete Post Functionality
+if (isset($_POST['delete_post'])) {
+    $post_id = $_POST['post_id'];
+    $user_id = $_SESSION['user_id'];
+
+    // Check if the logged-in user is the one who posted the post
+    $check_post_owner = $pdo->prepare("SELECT * FROM posts WHERE id = ? AND user_id = ?");
+    $check_post_owner->execute([$post_id, $user_id]);
+
+    // If the user is the owner of the post or if an admin is deleting the post
+    if ($check_post_owner->rowCount() > 0 || $_SESSION['is_admin']) {
+        // Delete the post from the database
+        $delete_post_stmt = $pdo->prepare("DELETE FROM posts WHERE id = ?");
+        $delete_post_stmt->execute([$post_id]);
+
+        echo "<p>Post deleted successfully.</p>";
+    } else {
+        echo "<p>You cannot delete this post.</p>";
+    }
+}
+
+// Delete Comment Functionality
+if (isset($_POST['delete_comment'])) {
+    $comment_id = $_POST['comment_id'];
+    $user_id = $_SESSION['user_id'];
+
+    // Check if the logged-in user is the one who posted the comment
+    $check_comment_owner = $pdo->prepare("SELECT * FROM comments WHERE id = ? AND user_id = ?");
+    $check_comment_owner->execute([$comment_id, $user_id]);
+
+    // If the user is the owner of the comment or if you want to allow admins to delete comments
+    if ($check_comment_owner->rowCount() > 0 || $_SESSION['is_admin']) {
+        // Delete the comment
+        $delete_comment_stmt = $pdo->prepare("DELETE FROM comments WHERE id = ?");
+        $delete_comment_stmt->execute([$comment_id]);
+
+        echo "<p>Comment deleted successfully.</p>";
+    } else {
+        echo "<p>You cannot delete this comment.</p>";
+    }
+}
+
+// Fetch all posts and associated comments
+$sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
+               u.id AS user_id, u.email, u.profile_picture 
+        FROM posts p 
+        INNER JOIN users u ON p.user_id = u.id
+        ORDER BY p.created_at DESC";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch users for the follow functionality
 $sql = "SELECT id, username, email FROM users";
 $users = $pdo->query($sql)->fetchAll();
 
@@ -43,45 +90,6 @@ $sql = "SELECT u.id, u.username, u.email FROM users u
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$_SESSION['user_id']]);
 $following_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch user posts (ensure no duplicates)
-$sql = "SELECT DISTINCT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
-               u.id AS user_id, u.email, u.profile_picture 
-        FROM posts p 
-        INNER JOIN users u ON p.user_id = u.id
-        ORDER BY p.created_at DESC"; // Get posts ordered by created_at
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Add like functionality (AJAX request)
-if (isset($_POST['like_post_id'])) {
-    $post_id = $_POST['like_post_id'];
-    $user_id = $_SESSION['user_id'];
-
-    // Check if already liked
-    $check_like = "SELECT * FROM likes WHERE post_id = :post_id AND user_id = :user_id";
-    $check_stmt = $pdo->prepare($check_like);
-    $check_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
-    if ($check_stmt->rowCount() == 0) {
-        // Add like
-        $insert_like = "INSERT INTO likes (post_id, user_id) VALUES (:post_id, :user_id)";
-        $insert_stmt = $pdo->prepare($insert_like);
-        $insert_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
-    }
-}
-
-// Add comment functionality (AJAX request)
-if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
-    $post_id = $_POST['comment_post_id'];
-    $content = $_POST['comment_content'];
-    $user_id = $_SESSION['user_id'];
-
-    // Add comment to the database
-    $insert_comment = "INSERT INTO comments (post_id, user_id, content) VALUES (:post_id, :user_id, :content)";
-    $insert_stmt = $pdo->prepare($insert_comment);
-    $insert_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id, 'content' => $content]);
-}
 ?>
 
 <!DOCTYPE html>
@@ -119,7 +127,7 @@ if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
         <div class="post-header">
           <img src="<?= $post['profile_picture'] ?>" alt="User" class="post-avatar">
           <div class="post-info">
-            <strong><a href="profile.php?id=<?= $post['user_id'] ?>" class="post-username"><?= $post['email'] ?></a></strong>
+            <strong><?= $post['email'] ?></strong> <!-- Displaying email instead of username -->
             <p class="timestamp"><?= $post['post_created_at'] ?></p>
           </div>
         </div>
@@ -128,6 +136,13 @@ if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
           <button class="like-btn" onclick="likePost(<?= $post['post_id'] ?>)">❤️</button>
           <button class="comment-btn" onclick="toggleCommentSection(<?= $post['post_id'] ?>)">💬</button>
           <button class="share-btn">🔄</button>
+          <!-- Only show delete button if the logged-in user is the post author or an admin -->
+          <?php if ($post['user_id'] == $_SESSION['user_id'] || $_SESSION['is_admin']) { ?>
+            <form method="POST" action="home.php" style="display:inline;">
+              <input type="hidden" name="post_id" value="<?= $post['post_id'] ?>">
+              <button type="submit" name="delete_post" onclick="return confirm('Are you sure you want to delete this post?')">Delete Post</button>
+            </form>
+          <?php } ?>
         </div>
         <div class="post-stats">
           <p id="likeCount<?= $post['post_id'] ?>">0 Likes</p>
@@ -136,25 +151,38 @@ if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
         <div class="comment-section" id="commentSection<?= $post['post_id'] ?>" style="display:none;">
           <textarea id="commentInput<?= $post['post_id'] ?>" placeholder="Add a comment..."></textarea>
           <button onclick="postComment(<?= $post['post_id'] ?>)">Post Comment</button>
-          <div id="commentsDisplay<?= $post['post_id'] ?>"></div>
+          <div id="commentsDisplay<?= $post['post_id'] ?>">
+            <?php 
+            // Fetch comments for this post
+            $comment_sql = "SELECT c.id AS comment_id, c.content AS comment_content, c.created_at AS comment_created_at, 
+                               u.username 
+                            FROM comments c 
+                            INNER JOIN users u ON c.user_id = u.id 
+                            WHERE c.post_id = ?";
+            $comment_stmt = $pdo->prepare($comment_sql);
+            $comment_stmt->execute([$post['post_id']]);
+            $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($comments as $comment) {
+              ?>
+              <div class="comment">
+                <strong><?= $comment['username'] ?>:</strong> <?= $comment['comment_content'] ?>
+                <!-- Show delete button for comment if user is the owner or admin -->
+                <?php if ($comment['user_id'] == $_SESSION['user_id'] || $_SESSION['is_admin']) { ?>
+                  <form method="POST" action="home.php" style="display:inline;">
+                    <input type="hidden" name="comment_id" value="<?= $comment['comment_id'] ?>">
+                    <button type="submit" name="delete_comment" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                  </form>
+                <?php } ?>
+              </div>
+              <?php
+            }
+            ?>
+          </div>
         </div>
       </div>
     <?php } ?>
   </div>
-
-  <!-- Follow Users Section -->
-  <h3>Follow Users</h3>
-  <?php foreach ($users as $user) { ?>
-    <?php if ($user['id'] != $_SESSION['user_id']) { // Don't show follow button for the logged-in user ?>
-      <div>
-        <p><a href="profile.php?id=<?= $user['id'] ?>"><?= $user['username'] ?></a> (<?= $user['email'] ?>)</p>
-        <form method="POST" action="home.php">
-          <input type="hidden" name="follow_user_id" value="<?= $user['id'] ?>">
-          <button type="submit">Follow</button>
-        </form>
-      </div>
-    <?php } ?>
-  <?php } ?>
 
   <footer>
     <button>🏠</button>

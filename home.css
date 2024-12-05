@@ -4,298 +4,239 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
-  }
-  
-  body {
-    background-color: #000; 
-    color: #fff; 
+}
+
+body {
+    background-color: #121212; /* Updated to dark gray for softer contrast */
+    color: #e0e0e0; /* Updated to light gray for better readability */
     padding: 20px;
-  }
-  
-  /* Header Section */
-  header {
+}
+
+/* Header Section */
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #111;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  }
-  
-  .header-left h1 {
-    font-size: 24px;
-    color: #fff; 
-  }
-  
-  .header-right button {
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.header-left h1 {
+    font-size: 26px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.header-right button {
     background: none;
-    border: none; 
-    padding: 8px 15px;
+    border: 2px solid #555;
+    border-radius: 50%;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    color: #fff;
     cursor: pointer;
-    margin-left: 10px;
-    color: #fff; 
-  }
-  
-  .header-right button:hover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-right button:hover {
     background-color: #333;
-  }
-  
-  /* Stories Section */
-  .stories {
+}
+
+/* Stories Section */
+.stories {
     display: flex;
     overflow-x: auto;
-    padding: 10px 0;
+    padding: 15px 0;
     margin-bottom: 20px;
-    background-color: #111;
-  }
-  
-  .story {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.story {
     text-align: center;
     margin-right: 15px;
-  }
-  
-  .story-circle {
+}
+
+.story-circle {
     width: 70px;
     height: 70px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #0073e6;
-  }
-  
-  .story-img {
+    border: 2px solid #3b82f6; /* Updated to a softer blue */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.story-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-  
-  .story p {
+}
+
+.story p {
     font-size: 14px;
-    color: #fff;
+    color: #e0e0e0;
     margin-top: 5px;
-  }
-  
-  /* Main Feed Section */
-  .feed {
+}
+
+/* Feed Section */
+.feed {
     margin-top: 20px;
-  }
-  
-  .post {
-    background: #222;
+}
+
+.post {
+    background: #242424;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
+    border: 1px solid #333;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     margin-bottom: 20px;
-  }
-  
-  .post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .post-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .post-info strong {
-    font-size: 18px;
-  }
-  
-  .timestamp {
-    color: gray;
-    font-size: 14px;
-  }
-  
-  .post-content {
-    font-size: 16px;
-    margin-bottom: 15px;
-  }
-  
-  .post-actions button {
-    background: none;
-    border: none;
-    color: #0073e6; 
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  .post-actions button:hover {
-    color: #fff; 
-  }
-  
-  .post-stats {
-    margin-top: 10px;
-  }
-  
-  /* Comment section styles */
-  .comment-section {
-    margin-top: 10px;
-    max-height: 300px; 
-    overflow-y: auto; 
-    padding-right: 10px; 
-    
-    /* Firefox styles */
-    scrollbar-width: thin; 
-    scrollbar-color: transparent transparent;
-  }
-  
-  /* Chrome, Safari, Edge */
-  .comment-section::-webkit-scrollbar {
-    width: 0px; 
-    background: transparent; 
-  }
-  
-  .comment-section::-webkit-scrollbar-thumb {
-    background: transparent; /* Make the scrollbar thumb invisible */
-  }
-  
-  /* Message & Conversation Styling */
-  .conversation {
-    display: none;
-    background-color: #222;
-    color: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    margin-top: 20px;
-  }
-  
-  .conversation h3 {
-    font-size: 22px;
-    margin-bottom: 15px;
-  }
-  
-  .message {
-    margin-bottom: 15px;
-  }
-  
-  .message strong {
-    color: #0073e6;
-  }
-  
-  .message p {
-    background-color: #333;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
-  .message .timestamp {
-    font-size: 12px;
-    color: #888;
-  }
-  
-  textarea {
-    width: 100%;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #555;
-    border-radius: 5px;
-    margin-top: 15px;
-    resize: none;
-  }
-  
-  .send-message-btn {
-    background-color: #0073e6;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .send-message-btn:hover {
-    background-color: #005bb5;
-  }
-  
-  .friend {
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.post:hover {
+    background-color: #292929;
+    transform: scale(1.02);
+}
+
+.post-header {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-    cursor: pointer;
-  }
-  
-  .friend-avatar {
+}
+
+.post-avatar {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .friend p {
+    border: 2px solid #3b82f6;
+    margin-right: 15px;
+}
+
+.post-info strong {
     font-size: 18px;
-    color: #fff;
-  }
-  
-  .friend:hover {
-    background-color: #333;
-    padding: 10px;
-    border-radius: 8px;
-  }
-  
-  /* Footer Navigation (Navbar with Icons) */
-  footer {
+    color: #ffffff;
+}
+
+.timestamp {
+    color: #9e9e9e;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.post-content {
+    font-size: 16px;
+    color: #d1d1d1;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.post-actions button {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.post-actions button:hover {
+    color: #ffffff;
+}
+
+.post-stats {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #9e9e9e;
+}
+
+/* Comment Section Styles */
+.comment-section {
+    margin-top: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #555 #121212;
+}
+
+.comment-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.comment-section::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+.comment-section::-webkit-scrollbar-thumb:hover {
+    background-color: #777;
+}
+
+/* Footer Navigation */
+footer {
     display: flex;
     justify-content: space-around;
-    padding: 10px 0; 
-    background-color: #111; 
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+    padding: 15px 0;
+    background-color: #1e1e1e;
+    border-top: 1px solid #333;
     position: fixed;
-    width: 100%; 
+    width: 100%;
     bottom: 0;
-    left: 0; 
-    right: 0; 
-  }
-  
-  footer button {
-    font-size: 24px; 
+    left: 0;
+}
+
+footer button {
+    font-size: 24px;
     padding: 10px;
     background: none;
-    border: none; 
+    border: none;
+    color: #ffffff;
     cursor: pointer;
-    color: #fff; 
     transition: background-color 0.3s ease;
-  }
-  
-  footer button:hover {
-    background-color: #333; 
-  }
-  
-  /* Media Query for Smaller Screens */
-  @media (max-width: 430px) {
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 20px;
+}
+
+footer button:hover {
+    background-color: #333;
+    border-radius: 50%;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .header-left h1 {
+        font-size: 20px;
     }
-  
-    .header-left {
-        margin-bottom: 10px;
+
+    .post-content {
+        font-size: 14px;
     }
-  
-    .header-right {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
+
     footer {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    footer button {
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 430px) {
+    header {
         flex-direction: column;
         padding: 15px;
     }
-  
-    footer button {
-        margin-bottom: 10px;
-        font-size: 30px; 
+
+    .header-right {
+        margin-top: 10px;
     }
-  
-    footer button:last-child {
-        margin-bottom: 0;
-    }
-  }
-  
+}
