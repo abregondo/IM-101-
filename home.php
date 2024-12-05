@@ -33,14 +33,23 @@ if (isset($_POST['create_post'])) {
     $post_content = $_POST['post_content'];
     $user_id = $_SESSION['user_id'];
 
-    // Insert the new post into the database
-    $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
-    $stmt = $pdo->prepare($insert_post);
-    $stmt->execute(['user_id' => $user_id, 'content' => $post_content]);
+    // Check if the post content already exists for the user to avoid duplicates
+    $check_post_stmt = $pdo->prepare("SELECT * FROM posts WHERE content = ? AND user_id = ?");
+    $check_post_stmt->execute([$post_content, $user_id]);
+    $existing_post = $check_post_stmt->fetch();
 
-    // Redirect after post submission to prevent resubmission on refresh
-    header("Location: home.php");
-    exit();
+    if (!$existing_post) {
+        // Insert the new post into the database
+        $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
+        $stmt = $pdo->prepare($insert_post);
+        $stmt->execute(['user_id' => $user_id, 'content' => $post_content]);
+
+        // Redirect after post submission to prevent resubmission on refresh
+        header("Location: home.php");
+        exit();
+    } else {
+        echo "<p>This post already exists. Please create a unique post.</p>";
+    }
 }
 
 // Fetch all users to display them and allow following
@@ -206,7 +215,7 @@ if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
 
     function toggleCommentSection(postId) {
       const commentSection = document.getElementById('commentSection' + postId);
-      commentSection.style.display = commentSection.style.display === "none" ? "block" : "none";
+      commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
     }
   </script>
 </body>
