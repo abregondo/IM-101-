@@ -109,12 +109,12 @@ header {
 
 /* Post Styling */
 .post {
-  background-color: #f9f9f9; /* Light background for the post */
-  border: 1px solid #ddd; /* Light gray border */
+  background-color: #2a2a2a; /* Darker background for better contrast */
+  border: 1px solid #333; /* Darker border to match the background */
   border-radius: 10px; /* Rounded corners for a smoother look */
   margin-bottom: 20px; /* Space between posts */
   padding: 15px; /* Padding inside the post */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Slightly darker shadow for depth */
 }
 
 /* Post Header Styling */
