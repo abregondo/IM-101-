@@ -2,6 +2,17 @@
 session_start();
 include('db.php'); // Make sure you have a file for DB connection
 
+// Handle form submission for creating a new post
+if (isset($_POST['create_post'])) {
+    $post_content = $_POST['post_content'];
+    $user_id = $_SESSION['user_id'];
+
+    // Insert the new post into the database
+    $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
+    $stmt = $pdo->prepare($insert_post);
+    $stmt->execute(['user_id' => $user_id, 'content' => $post_content]);
+}
+
 // Fetch user posts
 $sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
                u.id AS user_id, u.email, u.profile_picture 
@@ -61,6 +72,14 @@ if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
       <a href="messages.php"><button id="msgBtn">💬</button></a>
     </div>
   </header>
+
+  <!-- Create Post Section -->
+  <div class="create-post-section">
+    <form method="POST" action="home.php">
+      <textarea name="post_content" placeholder="What's on your mind?" required></textarea>
+      <button type="submit" name="create_post">Post</button>
+    </form>
+  </div>
 
   <!-- Feed Section -->
   <div class="feed">
