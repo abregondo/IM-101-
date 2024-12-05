@@ -107,6 +107,98 @@ header {
     background-color: #2563eb;
 }
 
+/* Post Styling */
+.post {
+  background-color: #f9f9f9; /* Light background for the post */
+  border: 1px solid #ddd; /* Light gray border */
+  border-radius: 10px; /* Rounded corners for a smoother look */
+  margin-bottom: 20px; /* Space between posts */
+  padding: 15px; /* Padding inside the post */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+/* Post Header Styling */
+.post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Circular avatar */
+  margin-right: 10px;
+}
+
+.post-info {
+  font-size: 14px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Post Content */
+.post-content {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+/* Post Actions */
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.like-btn, .comment-btn, .share-btn {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.like-btn:hover, .comment-btn:hover, .share-btn:hover {
+  background-color: #f0f0f0;
+}
+
+/* Post Stats */
+.post-stats {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Comment Section */
+.comment-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
 /* Footer Navigation */
 footer {
     display: flex;
