@@ -8,18 +8,22 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Fetch all users (excluding the logged-in user)
+// Fetch current user ID
 $user_id = $_SESSION['user_id'];
-$sql_users = "SELECT id, email, profile_picture FROM users WHERE id != :user_id";
-$stmt_users = $pdo->prepare($sql_users);
-$stmt_users->execute(['user_id' => $user_id]);
-$users_result = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch current user's friends
-$sql_friends = "SELECT friend_id, status FROM friends WHERE user_id = :user_id OR friend_id = :user_id";
+// Fetch two specific friends (change the IDs based on your test users)
+$friend_ids = [2, 3];  // Example: Friend IDs to display. Change these to real ones.
+
+$sql_friends = "SELECT id, email, profile_picture FROM users WHERE id IN (" . implode(',', $friend_ids) . ")";
 $stmt_friends = $pdo->prepare($sql_friends);
-$stmt_friends->execute(['user_id' => $user_id]);
+$stmt_friends->execute();
 $friends_result = $stmt_friends->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch current user's friends and follow status
+$sql_user_friends = "SELECT friend_id, status FROM friends WHERE user_id = :user_id OR friend_id = :user_id";
+$stmt_user_friends = $pdo->prepare($sql_user_friends);
+$stmt_user_friends->execute(['user_id' => $user_id]);
+$current_user_friends = $stmt_user_friends->fetchAll(PDO::FETCH_ASSOC);
 
 // Add friend request functionality
 if (isset($_POST['send_friend_request'])) {
@@ -36,14 +40,6 @@ if (isset($_POST['send_friend_request'])) {
         $stmt_insert_request = $pdo->prepare($insert_request);
         $stmt_insert_request->execute(['user_id' => $user_id, 'friend_id' => $friend_id]);
     }
-}
-
-// Accept friend request
-if (isset($_POST['accept_friend_request'])) {
-    $friend_id = $_POST['friend_id'];
-    $update_request = "UPDATE friends SET status = 'accepted' WHERE user_id = :friend_id AND friend_id = :user_id";
-    $stmt_update_request = $pdo->prepare($update_request);
-    $stmt_update_request->execute(['user_id' => $user_id, 'friend_id' => $friend_id]);
 }
 
 // Follow functionality
@@ -84,19 +80,20 @@ if (isset($_POST['follow_user'])) {
     </div>
   </header>
 
-  <!-- Feed Section -->
+  <!-- Friends Section -->
   <div class="feed">
-    <h2>Users to Add as Friends or Follow</h2>
-    <?php foreach ($users_result as $user) { ?>
+    <h2>Friends (Add or Follow)</h2>
+    <?php foreach ($friends_result as $friend) { ?>
       <div class="user-profile">
-        <img src="<?= $user['profile_picture'] ?>" alt="User" class="user-avatar">
-        <strong><?= $user['email'] ?></strong>
+        <img src="<?= $friend['profile_picture'] ?>" alt="User" class="user-avatar">
+        <strong><?= $friend['email'] ?></strong>
 
         <form action="home.php" method="POST">
           <?php
+          // Check if the current user and friend are already connected
           $is_friend = false;
-          foreach ($friends_result as $friend) {
-              if ($friend['friend_id'] == $user['id'] || $friend['user_id'] == $user['id']) {
+          foreach ($current_user_friends as $user_friend) {
+              if ($user_friend['friend_id'] == $friend['id'] || $user_friend['friend_id'] == $friend['id']) {
                   $is_friend = true;
                   break;
               }
@@ -105,10 +102,10 @@ if (isset($_POST['follow_user'])) {
           if ($is_friend) {
               echo "<p>You are friends!</p>";
           } else {
-              // Check if the user has already sent a request
+              // Check if the user has already sent a friend request
               $request_pending = false;
-              foreach ($friends_result as $friend) {
-                  if (($friend['friend_id'] == $user['id'] || $friend['user_id'] == $user['id']) && $friend['status'] == 'pending') {
+              foreach ($current_user_friends as $user_friend) {
+                  if (($user_friend['friend_id'] == $friend['id'] || $user_friend['friend_id'] == $friend['id']) && $user_friend['status'] == 'pending') {
                       $request_pending = true;
                       break;
                   }
@@ -118,7 +115,7 @@ if (isset($_POST['follow_user'])) {
                   echo "<p>Friend request pending...</p>";
               } else {
                   echo '<button type="submit" name="send_friend_request" value="1" style="background-color: #4CAF50;">Send Friend Request</button>';
-                  echo '<input type="hidden" name="friend_id" value="' . $user['id'] . '">';
+                  echo '<input type="hidden" name="friend_id" value="' . $friend['id'] . '">';
               }
           }
           ?>
@@ -127,7 +124,7 @@ if (isset($_POST['follow_user'])) {
         <!-- Follow Button -->
         <form action="home.php" method="POST">
           <button type="submit" name="follow_user" value="1">Follow</button>
-          <input type="hidden" name="followed_id" value="<?= $user['id'] ?>">
+          <input type="hidden" name="followed_id" value="<?= $friend['id'] ?>">
         </form>
       </div>
     <?php } ?>
