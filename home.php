@@ -1,16 +1,20 @@
 <?php
 session_start();
-include('db.php'); // Make sure you have a file for DB connection
+include('db.php'); // Include your PDO connection
 
 // Fetch user posts
 $sql = "SELECT p.*, u.username, u.profile_picture FROM posts p 
         INNER JOIN users u ON p.user_id = u.id ORDER BY p.created_at DESC";
-$posts_result = mysqli_query($conn, $sql);
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch user's friends
 $user_id = $_SESSION['user_id'];
-$sql_friends = "SELECT * FROM friends WHERE user_id = '$user_id' AND status = 'accepted'";
-$friends_result = mysqli_query($conn, $sql_friends);
+$sql_friends = "SELECT * FROM friends WHERE user_id = :user_id AND status = 'accepted'";
+$stmt_friends = $pdo->prepare($sql_friends);
+$stmt_friends->execute(['user_id' => $user_id]);
+$friends_result = $stmt_friends->fetchAll(PDO::FETCH_ASSOC);
 
 // Add like functionality (AJAX request)
 if (isset($_POST['like_post_id'])) {
@@ -18,24 +22,28 @@ if (isset($_POST['like_post_id'])) {
     $user_id = $_SESSION['user_id'];
 
     // Check if already liked
-    $check_like = "SELECT * FROM likes WHERE post_id = '$post_id' AND user_id = '$user_id'";
-    $like_result = mysqli_query($conn, $check_like);
-    if (mysqli_num_rows($like_result) == 0) {
+    $check_like = "SELECT * FROM likes WHERE post_id = :post_id AND user_id = :user_id";
+    $stmt_check = $pdo->prepare($check_like);
+    $stmt_check->execute(['post_id' => $post_id, 'user_id' => $user_id]);
+
+    if ($stmt_check->rowCount() == 0) {
         // Add like
-        $insert_like = "INSERT INTO likes (post_id, user_id) VALUES ('$post_id', '$user_id')";
-        mysqli_query($conn, $insert_like);
+        $insert_like = "INSERT INTO likes (post_id, user_id) VALUES (:post_id, :user_id)";
+        $stmt_insert = $pdo->prepare($insert_like);
+        $stmt_insert->execute(['post_id' => $post_id, 'user_id' => $user_id]);
     }
 }
 
 // Add comment functionality (AJAX request)
 if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
     $post_id = $_POST['comment_post_id'];
-    $content = mysqli_real_escape_string($conn, $_POST['comment_content']);
+    $content = $_POST['comment_content'];
     $user_id = $_SESSION['user_id'];
 
     // Add comment to the database
-    $insert_comment = "INSERT INTO comments (post_id, user_id, content) VALUES ('$post_id', '$user_id', '$content')";
-    mysqli_query($conn, $insert_comment);
+    $insert_comment = "INSERT INTO comments (post_id, user_id, content) VALUES (:post_id, :user_id, :content)";
+    $stmt_comment = $pdo->prepare($insert_comment);
+    $stmt_comment->execute(['post_id' => $post_id, 'user_id' => $user_id, 'content' => $content]);
 }
 
 // Add friend functionality (AJAX request)
@@ -44,8 +52,9 @@ if (isset($_POST['friend_id'])) {
     $user_id = $_SESSION['user_id'];
 
     // Add friend request
-    $add_friend = "INSERT INTO friends (user_id, friend_id, status) VALUES ('$user_id', '$friend_id', 'pending')";
-    mysqli_query($conn, $add_friend);
+    $add_friend = "INSERT INTO friends (user_id, friend_id, status) VALUES (:user_id, :friend_id, 'pending')";
+    $stmt_add_friend = $pdo->prepare($add_friend);
+    $stmt_add_friend->execute(['user_id' => $user_id, 'friend_id' => $friend_id]);
 }
 ?>
 
@@ -71,16 +80,16 @@ if (isset($_POST['friend_id'])) {
 
   <!-- Feed Section -->
   <div class="feed">
-    <?php while ($post = mysqli_fetch_assoc($posts_result)) { ?>
+    <?php foreach ($posts_result as $post) { ?>
       <div class="post">
         <div class="post-header">
-          <img src="<?= $post['profile_picture'] ?>" alt="User" class="post-avatar">
+          <img src="<?= htmlspecialchars($post['profile_picture']) ?>" alt="User" class="post-avatar">
           <div class="post-info">
-            <strong><?= $post['username'] ?></strong>
-            <p class="timestamp"><?= $post['created_at'] ?></p>
+            <strong><?= htmlspecialchars($post['username']) ?></strong>
+            <p class="timestamp"><?= htmlspecialchars($post['created_at']) ?></p>
           </div>
         </div>
-        <p class="post-content"><?= $post['content'] ?></p>
+        <p class="post-content"><?= htmlspecialchars($post['content']) ?></p>
         <div class="post-actions">
           <button class="like-btn" onclick="likePost(<?= $post['id'] ?>)">❤️</button>
           <button class="comment-btn" onclick="toggleCommentSection(<?= $post['id'] ?>)">💬</button>
