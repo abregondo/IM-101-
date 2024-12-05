@@ -40,23 +40,22 @@ if (isset($_POST['create_post'])) {
     // Insert the new post into the database if not a duplicate
     $insert_post = "INSERT INTO posts (user_id, content, file_path, created_at) VALUES (:user_id, :content, :file_path, NOW())";
     $stmt = $pdo->prepare($insert_post);
-    $stmt->execute([
+    $stmt->execute([ 
         'user_id' => $user_id, 
         'content' => $post_content, 
-        'file_path' => $post_file
+        'file_path' => $post_file 
     ]);
 }
 
 // Fetch all posts
 $sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, p.file_path, 
-               u.id AS user_id, u.email, u.profile_picture 
+               u.id AS user_id, u.username, u.profile_picture 
         FROM posts p 
         INNER JOIN users u ON p.user_id = u.id
         ORDER BY p.created_at DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -95,7 +94,7 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="post-header">
           <img src="<?= $post['profile_picture'] ?>" alt="User" class="post-avatar">
           <div class="post-info">
-            <strong><?= $post['email'] ?></strong>
+            <strong><?= $post['username'] ?></strong> <!-- Displaying username instead of email -->
             <p class="timestamp"><?= $post['post_created_at'] ?></p>
           </div>
         </div>
