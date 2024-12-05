@@ -45,6 +45,10 @@ if (isset($_POST['create_post'])) {
         'content' => $post_content, 
         'file_path' => $post_file 
     ]);
+
+    // Redirect after successful form submission to prevent resubmission
+    header('Location: home.php');
+    exit();
 }
 
 // Fetch all posts
