@@ -7,7 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
-    $profile_picture = $_FILES['profile_picture']['name']; // Profile picture (if uploaded)
 
     // Check if passwords match
     if ($password !== $confirm_password) {
@@ -24,22 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($user) {
             $error = "Email is already registered.";
         } else {
-            // Check if profile picture is uploaded and move it to a folder
-            if ($profile_picture) {
-                $target_dir = "uploads/";
-                $target_file = $target_dir . basename($profile_picture);
-                move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target_file);
-            } else {
-                $target_file = null; // If no profile picture, set to null
-            }
-
             // Insert the new user into the database
-            $stmt = $pdo->prepare("INSERT INTO users (username, email, password, profile_picture) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$username, $email, $hashed_password, $target_file]);
+            if (!isset($error)) {
+                $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+                $stmt->execute([$username, $email, $hashed_password]);
 
-            // Redirect to the sign-in page after successful registration
-            header('Location: sign_in.php');
-            exit();
+                // Redirect to the sign-in page after successful registration
+                header('Location: sign_in.php');
+                exit();
+            }
         }
     }
 }
@@ -51,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Create Account</title>
     <style>
-        /* General body styling */
-        body {
+/* General body styling */
+body {
     background-color: #f4f4f4;
     font-family: 'Arial', sans-serif;
     display: flex;
@@ -181,12 +173,11 @@ p {
         padding: 12px;
         font-size: 16px;
     }
-}
-    </style>
+}    </style>
 </head>
 <body>
 
-<form action="create_account.php" method="POST" enctype="multipart/form-data">
+<form action="create_account.php" method="POST">
     <h2>Create Account</h2>
     <?php if (isset($error)) echo "<p>$error</p>"; ?>
 
@@ -208,11 +199,6 @@ p {
     <div class="form-group">
         <label for="confirm_password">Confirm Password</label>
         <input type="password" name="confirm_password" id="confirm_password" required>
-    </div>
-
-    <div class="form-group">
-        <label for="profile_picture">Profile Picture</label>
-        <input type="file" name="profile_picture" id="profile_picture" accept="image/*">
     </div>
 
     <button type="submit">Create Account</button>
