@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('db_connection.php'); // Make sure you have a file for DB connection
+include('db.php'); // Make sure you have a file for DB connection
 
 // Fetch user posts
 $sql = "SELECT p.*, u.username, u.profile_picture FROM posts p 
