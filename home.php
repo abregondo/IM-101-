@@ -60,35 +60,6 @@ $sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Add like functionality (AJAX request)
-if (isset($_POST['like_post_id'])) {
-    $post_id = $_POST['like_post_id'];
-    $user_id = $_SESSION['user_id'];
-
-    // Check if already liked
-    $check_like = "SELECT * FROM likes WHERE post_id = :post_id AND user_id = :user_id";
-    $check_stmt = $pdo->prepare($check_like);
-    $check_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
-    if ($check_stmt->rowCount() == 0) {
-        // Add like
-        $insert_like = "INSERT INTO likes (post_id, user_id) VALUES (:post_id, :user_id)";
-        $insert_stmt = $pdo->prepare($insert_like);
-        $insert_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
-    }
-}
-
-// Add comment functionality (AJAX request)
-if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
-    $post_id = $_POST['comment_post_id'];
-    $content = $_POST['comment_content'];
-    $user_id = $_SESSION['user_id'];
-
-    // Add comment to the database
-    $insert_comment = "INSERT INTO comments (post_id, user_id, content) VALUES (:post_id, :user_id, :content)";
-    $insert_stmt = $pdo->prepare($insert_comment);
-    $insert_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id, 'content' => $content]);
-}
 ?>
 
 <!DOCTYPE html>
@@ -124,9 +95,16 @@ if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
     <?php foreach ($posts_result as $post) { ?>
       <div class="post">
         <div class="post-header">
-          <img src="<?= $post['profile_picture'] ?>" alt="User" class="post-avatar">
+          <!-- Profile Picture -->
+          <a href="profile.php?user_id=<?= $post['user_id'] ?>" class="clickable-user">
+            <img src="<?= $post['profile_picture'] ?>" alt="User" class="post-avatar">
+          </a>
+
           <div class="post-info">
-            <strong><?= $post['email'] ?></strong> <!-- Displaying email instead of username -->
+            <!-- Username or Email -->
+            <a href="profile.php?user_id=<?= $post['user_id'] ?>" class="clickable-user">
+              <strong><?= $post['email'] ?></strong> <!-- Displaying email instead of username -->
+            </a>
             <p class="timestamp"><?= $post['post_created_at'] ?></p>
           </div>
         </div>
