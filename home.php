@@ -23,7 +23,7 @@ if (isset($_POST['create_post'])) {
         $stmt = $pdo->prepare($insert_post);
         $stmt->execute(['user_id' => $user_id, 'content' => $post_content]);
     } else {
-        echo "<p>You have already posted this content.</p>";
+        echo "";
     }
 }
 
