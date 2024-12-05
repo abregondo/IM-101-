@@ -2,6 +2,44 @@
 session_start();
 include('db.php'); // Make sure you have a file for DB connection
 
+// Ensure user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: sign_in.php');
+    exit();
+}
+
+// Follow a user
+if (isset($_POST['follow_user_id'])) {
+    $follower_id = $_SESSION['user_id'];  // Logged-in user
+    $following_id = $_POST['follow_user_id'];
+
+    // Check if already following
+    $stmt = $pdo->prepare("SELECT * FROM follows WHERE follower_id = ? AND following_id = ?");
+    $stmt->execute([$follower_id, $following_id]);
+    $existing_follow = $stmt->fetch();
+
+    if (!$existing_follow) {
+        // Insert the follow record
+        $stmt = $pdo->prepare("INSERT INTO follows (follower_id, following_id) VALUES (?, ?)");
+        $stmt->execute([$follower_id, $following_id]);
+        echo "<p>Followed successfully!</p>";
+    } else {
+        echo "<p>You are already following this user.</p>";
+    }
+}
+
+// Fetch all users to display them and allow following
+$sql = "SELECT id, username, email FROM users";
+$users = $pdo->query($sql)->fetchAll();
+
+// Fetch the users the logged-in user is following
+$sql = "SELECT u.id, u.username, u.email FROM users u 
+        INNER JOIN follows f ON u.id = f.following_id 
+        WHERE f.follower_id = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$_SESSION['user_id']]);
+$following_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Handle form submission for creating a new post
 if (isset($_POST['create_post'])) {
     $post_content = $_POST['post_content'];
@@ -110,6 +148,20 @@ if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
       </div>
     <?php } ?>
   </div>
+
+  <!-- Follow Users Section -->
+  <h3>Follow Users</h3>
+  <?php foreach ($users as $user) { ?>
+    <?php if ($user['id'] != $_SESSION['user_id']) { // Don't show follow button for the logged-in user ?>
+      <div>
+        <p><?php echo $user['username']; ?> (<?php echo $user['email']; ?>)</p>
+        <form method="POST" action="home.php">
+          <input type="hidden" name="follow_user_id" value="<?php echo $user['id']; ?>">
+          <button type="submit">Follow</button>
+        </form>
+      </div>
+    <?php } ?>
+  <?php } ?>
 
   <footer>
     <button>🏠</button>
