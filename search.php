@@ -4,15 +4,18 @@ include('db.php'); // Include the database connection
 
 // Handle search form submission
 $search_query = "";
-if (isset($_POST['search_term'])) {
-    $search_query = $_POST['search_term'];
-}
+$search_results = [];
 
-// Query to search users by username or email (use the correct column name)
-$sql = "SELECT id, email, profile_picture, username FROM users WHERE username LIKE :search_query OR email LIKE :search_query";
-$stmt = $pdo->prepare($sql);
-$stmt->execute(['search_query' => '%' . $search_query . '%']);
-$search_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// If there is a search term, execute the query
+if (isset($_POST['search_term']) && !empty($_POST['search_term'])) {
+    $search_query = $_POST['search_term'];
+
+    // Query to search users by username or email
+    $sql = "SELECT id, email, profile_picture, username FROM users WHERE username LIKE :search_query OR email LIKE :search_query";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['search_query' => '%' . $search_query . '%']);
+    $search_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 ?>
 
@@ -43,10 +46,10 @@ $search_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <input type="text" name="search_term" placeholder="Search users by name or email..." value="<?= htmlspecialchars($search_query) ?>" required>
             <button type="submit">🔍</button>
         </form>
-        
+
         <!-- Search Results -->
         <div class="search-results">
-            <?php if ($search_query): ?>
+            <?php if (!empty($search_query)): ?>
                 <?php if (count($search_results) > 0): ?>
                     <?php foreach ($search_results as $user): ?>
                         <div class="result-item">
@@ -60,6 +63,8 @@ $search_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php else: ?>
                     <p>No users found with that name or email.</p>
                 <?php endif; ?>
+            <?php else: ?>
+                <p>Please enter a name or email to search.</p>
             <?php endif; ?>
         </div>
     </div>
