@@ -8,26 +8,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Follow a user
-if (isset($_POST['follow_user_id'])) {
-    $follower_id = $_SESSION['user_id'];  // Logged-in user
-    $following_id = $_POST['follow_user_id'];
-
-    // Check if already following
-    $stmt = $pdo->prepare("SELECT * FROM follows WHERE follower_id = ? AND following_id = ?");
-    $stmt->execute([$follower_id, $following_id]);
-    $existing_follow = $stmt->fetch();
-
-    if (!$existing_follow) {
-        // Insert the follow record
-        $stmt = $pdo->prepare("INSERT INTO follows (follower_id, following_id) VALUES (?, ?)");
-        $stmt->execute([$follower_id, $following_id]);
-        echo "<p>Followed successfully!</p>";
-    } else {
-        echo "<p>You are already following this user.</p>";
-    }
-}
-
 // Handle form submission for creating a new post
 if (isset($_POST['create_post'])) {
     $post_content = $_POST['post_content'];
