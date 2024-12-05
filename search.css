@@ -7,19 +7,18 @@
   
   body {
     font-family: Arial, sans-serif;
-    background-color: #000; /* Black background */
-    color: #fff; /* White text */
+    background-color: #000;
+    color: #fff;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Ensures the page takes up full height */
+    min-height: 100vh;
   }
   
   header {
     display: flex;
     justify-content: space-between;
     padding: 20px;
-    background-color: #333; /* Dark header background */
-    border-bottom: 1px solid #444;
+    background-color: #333;
   }
   
   .app-name {
@@ -35,7 +34,6 @@
     color: #fff;
   }
   
-  /* Search Section */
   .search-container {
     padding: 20px;
     max-width: 800px;
@@ -71,7 +69,6 @@
     color: #fff;
   }
   
-  /* Search Results */
   .search-results {
     margin-top: 20px;
   }
@@ -98,28 +95,21 @@
   
   strong {
     font-size: 16px;
-    color: #fff;
   }
   
-  .post-content {
-    margin-top: 10px;
-  }
-  
-  .timestamp {
-    font-size: 12px;
+  .user-email {
+    font-size: 14px;
     color: #888;
     margin-top: 5px;
   }
   
-  /* Footer */
   footer {
     display: flex;
     justify-content: space-around;
     align-items: center;
     background-color: #333;
     padding: 10px;
-    border-top: 1px solid #444;
-    margin-top: auto; /* Pushes footer to the bottom */
+    margin-top: auto;
   }
   
   footer a button {
