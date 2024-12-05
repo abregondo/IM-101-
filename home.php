@@ -1,72 +1,44 @@
 <?php
 session_start();
-include('db.php'); // DB connection file
+include('db.php'); // Make sure you have a file for DB connection
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    echo 'You must be logged in to view this page.';
-    exit();
-}
+// Fetch user posts
+$sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
+               u.id AS user_id, u.email, u.profile_picture 
+        FROM posts p 
+        INNER JOIN users u ON p.user_id = u.id
+        ORDER BY p.created_at DESC"; // Get posts ordered by created_at
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch current user ID
-$user_id = $_SESSION['user_id'];
+// Add like functionality (AJAX request)
+if (isset($_POST['like_post_id'])) {
+    $post_id = $_POST['like_post_id'];
+    $user_id = $_SESSION['user_id'];
 
-// Fetch friends of the current user (those who have accepted the friend request)
-$sql_friends = "SELECT u.id, u.email, u.profile_picture FROM users u 
-                JOIN friends f ON (f.user_id = u.id OR f.friend_id = u.id) 
-                WHERE (f.user_id = :user_id OR f.friend_id = :user_id) AND f.status = 'accepted' 
-                AND u.id != :user_id";
-$stmt_friends = $pdo->prepare($sql_friends);
-$stmt_friends->execute(['user_id' => $user_id]);
-$friends_result = $stmt_friends->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch pending friend requests for the current user
-$sql_pending_requests = "SELECT u.id, u.email, u.profile_picture FROM users u 
-                         JOIN friends f ON (f.user_id = u.id OR f.friend_id = u.id)
-                         WHERE (f.user_id = :user_id OR f.friend_id = :user_id) AND f.status = 'pending' 
-                         AND u.id != :user_id";
-$stmt_pending_requests = $pdo->prepare($sql_pending_requests);
-$stmt_pending_requests->execute(['user_id' => $user_id]);
-$pending_requests_result = $stmt_pending_requests->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch current user's follow status
-$sql_user_friends = "SELECT friend_id, status FROM friends WHERE user_id = :user_id OR friend_id = :user_id";
-$stmt_user_friends = $pdo->prepare($sql_user_friends);
-$stmt_user_friends->execute(['user_id' => $user_id]);
-$current_user_friends = $stmt_user_friends->fetchAll(PDO::FETCH_ASSOC);
-
-// Add friend request functionality
-if (isset($_POST['send_friend_request'])) {
-    $friend_id = $_POST['friend_id'];
-
-    // Check if a pending request already exists
-    $check_request = "SELECT * FROM friends WHERE (user_id = :user_id AND friend_id = :friend_id) OR (user_id = :friend_id AND friend_id = :user_id)";
-    $stmt_check_request = $pdo->prepare($check_request);
-    $stmt_check_request->execute(['user_id' => $user_id, 'friend_id' => $friend_id]);
-
-    if ($stmt_check_request->rowCount() == 0) {
-        // Insert new friend request
-        $insert_request = "INSERT INTO friends (user_id, friend_id, status) VALUES (:user_id, :friend_id, 'pending')";
-        $stmt_insert_request = $pdo->prepare($insert_request);
-        $stmt_insert_request->execute(['user_id' => $user_id, 'friend_id' => $friend_id]);
+    // Check if already liked
+    $check_like = "SELECT * FROM likes WHERE post_id = :post_id AND user_id = :user_id";
+    $check_stmt = $pdo->prepare($check_like);
+    $check_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
+    if ($check_stmt->rowCount() == 0) {
+        // Add like
+        $insert_like = "INSERT INTO likes (post_id, user_id) VALUES (:post_id, :user_id)";
+        $insert_stmt = $pdo->prepare($insert_like);
+        $insert_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
     }
 }
 
-// Follow functionality
-if (isset($_POST['follow_user'])) {
-    $followed_id = $_POST['followed_id'];
+// Add comment functionality (AJAX request)
+if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
+    $post_id = $_POST['comment_post_id'];
+    $content = $_POST['comment_content'];
+    $user_id = $_SESSION['user_id'];
 
-    // Check if already following
-    $check_follow = "SELECT * FROM followers WHERE follower_id = :follower_id AND followed_id = :followed_id";
-    $stmt_check_follow = $pdo->prepare($check_follow);
-    $stmt_check_follow->execute(['follower_id' => $user_id, 'followed_id' => $followed_id]);
-
-    if ($stmt_check_follow->rowCount() == 0) {
-        // Follow the user
-        $insert_follow = "INSERT INTO followers (follower_id, followed_id) VALUES (:follower_id, :followed_id)";
-        $stmt_insert_follow = $pdo->prepare($insert_follow);
-        $stmt_insert_follow->execute(['follower_id' => $user_id, 'followed_id' => $followed_id]);
-    }
+    // Add comment to the database
+    $insert_comment = "INSERT INTO comments (post_id, user_id, content) VALUES (:post_id, :user_id, :content)";
+    $insert_stmt = $pdo->prepare($insert_comment);
+    $insert_stmt->execute(['post_id' => $post_id, 'user_id' => $user_id, 'content' => $content]);
 }
 ?>
 
@@ -90,83 +62,32 @@ if (isset($_POST['follow_user'])) {
     </div>
   </header>
 
-  <!-- Friends Section -->
+  <!-- Feed Section -->
   <div class="feed">
-    <h2>Your Friends</h2>
-    <?php foreach ($friends_result as $friend) { ?>
-      <div class="user-profile">
-        <img src="<?= $friend['profile_picture'] ?>" alt="User" class="user-avatar">
-        <strong><?= $friend['email'] ?></strong>
-
-        <form action="home.php" method="POST">
-          <p>You are friends!</p>
-        </form>
-      </div>
-    <?php } ?>
-
-    <h2>Pending Friend Requests</h2>
-    <?php foreach ($pending_requests_result as $friend) { ?>
-      <div class="user-profile">
-        <img src="<?= $friend['profile_picture'] ?>" alt="User" class="user-avatar">
-        <strong><?= $friend['email'] ?></strong>
-
-        <form action="home.php" method="POST">
-          <p>Friend request pending...</p>
-        </form>
-      </div>
-    <?php } ?>
-
-    <h2>Other Users</h2>
-    <?php 
-      // Fetch other users who are not yet friends
-      $sql_other_users = "SELECT id, email, profile_picture FROM users WHERE id != :user_id";
-      $stmt_other_users = $pdo->prepare($sql_other_users);
-      $stmt_other_users->execute(['user_id' => $user_id]);
-      $other_users = $stmt_other_users->fetchAll(PDO::FETCH_ASSOC);
-
-      foreach ($other_users as $user) {
-    ?>
-      <div class="user-profile">
-        <img src="<?= $user['profile_picture'] ?>" alt="User" class="user-avatar">
-        <strong><?= $user['email'] ?></strong>
-
-        <form action="home.php" method="POST">
-          <?php
-          // Check if the current user has already sent a friend request or is already friends
-          $is_friend = false;
-          $request_pending = false;
-          foreach ($current_user_friends as $user_friend) {
-              if ($user_friend['friend_id'] == $user['id'] || $user_friend['friend_id'] == $user['id']) {
-                  $is_friend = true;
-                  break;
-              }
-          }
-
-          if ($is_friend) {
-              echo "<p>You are friends!</p>";
-          } else {
-              foreach ($current_user_friends as $user_friend) {
-                  if (($user_friend['friend_id'] == $user['id'] || $user_friend['friend_id'] == $user['id']) && $user_friend['status'] == 'pending') {
-                      $request_pending = true;
-                      break;
-                  }
-              }
-
-              if ($request_pending) {
-                  echo "<p>Friend request pending...</p>";
-              } else {
-                  echo '<button type="submit" name="send_friend_request" value="1" style="background-color: #4CAF50;">Send Friend Request</button>';
-                  echo '<input type="hidden" name="friend_id" value="' . $user['id'] . '">';
-              }
-          }
-          ?>
-        </form>
-
-        <!-- Follow Button -->
-        <form action="home.php" method="POST">
-          <button type="submit" name="follow_user" value="1">Follow</button>
-          <input type="hidden" name="followed_id" value="<?= $user['id'] ?>">
-        </form>
+    <?php foreach ($posts_result as $post) { ?>
+      <div class="post">
+        <div class="post-header">
+          <img src="<?= $post['profile_picture'] ?>" alt="User" class="post-avatar">
+          <div class="post-info">
+            <strong><?= $post['email'] ?></strong> <!-- Displaying email instead of username -->
+            <p class="timestamp"><?= $post['post_created_at'] ?></p>
+          </div>
+        </div>
+        <p class="post-content"><?= $post['post_content'] ?></p>
+        <div class="post-actions">
+          <button class="like-btn" onclick="likePost(<?= $post['post_id'] ?>)">❤️</button>
+          <button class="comment-btn" onclick="toggleCommentSection(<?= $post['post_id'] ?>)">💬</button>
+          <button class="share-btn">🔄</button>
+        </div>
+        <div class="post-stats">
+          <p id="likeCount<?= $post['post_id'] ?>">0 Likes</p>
+          <p id="commentCount<?= $post['post_id'] ?>">0 Comments</p>
+        </div>
+        <div class="comment-section" id="commentSection<?= $post['post_id'] ?>" style="display:none;">
+          <textarea id="commentInput<?= $post['post_id'] ?>" placeholder="Add a comment..."></textarea>
+          <button onclick="postComment(<?= $post['post_id'] ?>)">Post Comment</button>
+          <div id="commentsDisplay<?= $post['post_id'] ?>"></div>
+        </div>
       </div>
     <?php } ?>
   </div>
@@ -178,5 +99,40 @@ if (isset($_POST['follow_user'])) {
     <button>👤</button>
   </footer>
 
+  <script src="home.js"></script>
+  <script>
+    function likePost(postId) {
+      fetch('home.php', {
+        method: 'POST',
+        body: new URLSearchParams({
+          'like_post_id': postId
+        })
+      }).then(response => response.json()).then(data => {
+        // Update like count dynamically
+        document.getElementById('likeCount' + postId).innerText = data.likes + ' Likes';
+      });
+    }
+
+    function postComment(postId) {
+      const commentContent = document.getElementById('commentInput' + postId).value;
+      fetch('home.php', {
+        method: 'POST',
+        body: new URLSearchParams({
+          'comment_post_id': postId,
+          'comment_content': commentContent
+        })
+      }).then(response => response.json()).then(data => {
+        // Display new comment
+        const commentDiv = document.createElement('div');
+        commentDiv.innerHTML = data.username + ": " + data.comment;
+        document.getElementById('commentsDisplay' + postId).appendChild(commentDiv);
+      });
+    }
+
+    function toggleCommentSection(postId) {
+      const commentSection = document.getElementById('commentSection' + postId);
+      commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
 </body>
 </html>
