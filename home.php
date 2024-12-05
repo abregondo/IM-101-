@@ -37,7 +37,7 @@ if (isset($_POST['delete_post'])) {
     $check_post_owner->execute([$post_id, $user_id]);
 
     // If the user is the owner of the post or if an admin is deleting the post
-    if ($check_post_owner->rowCount() > 0 || $_SESSION['is_admin']) {
+    if ($check_post_owner->rowCount() > 0 || (isset($_SESSION['is_admin']) && $_SESSION['is_admin'])) {
         // Delete the post from the database
         $delete_post_stmt = $pdo->prepare("DELETE FROM posts WHERE id = ?");
         $delete_post_stmt->execute([$post_id]);
@@ -58,7 +58,7 @@ if (isset($_POST['delete_comment'])) {
     $check_comment_owner->execute([$comment_id, $user_id]);
 
     // If the user is the owner of the comment or if you want to allow admins to delete comments
-    if ($check_comment_owner->rowCount() > 0 || $_SESSION['is_admin']) {
+    if ($check_comment_owner->rowCount() > 0 || (isset($_SESSION['is_admin']) && $_SESSION['is_admin'])) {
         // Delete the comment
         $delete_comment_stmt = $pdo->prepare("DELETE FROM comments WHERE id = ?");
         $delete_comment_stmt->execute([$comment_id]);
@@ -137,7 +137,7 @@ $following_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <button class="comment-btn" onclick="toggleCommentSection(<?= $post['post_id'] ?>)">💬</button>
           <button class="share-btn">🔄</button>
           <!-- Only show delete button if the logged-in user is the post author or an admin -->
-          <?php if ($post['user_id'] == $_SESSION['user_id'] || $_SESSION['is_admin']) { ?>
+          <?php if ($post['user_id'] == $_SESSION['user_id'] || (isset($_SESSION['is_admin']) && $_SESSION['is_admin'])) { ?>
             <form method="POST" action="home.php" style="display:inline;">
               <input type="hidden" name="post_id" value="<?= $post['post_id'] ?>">
               <button type="submit" name="delete_post" onclick="return confirm('Are you sure you want to delete this post?')">Delete Post</button>
@@ -168,7 +168,7 @@ $following_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <div class="comment">
                 <strong><?= $comment['username'] ?>:</strong> <?= $comment['comment_content'] ?>
                 <!-- Show delete button for comment if user is the owner or admin -->
-                <?php if ($comment['user_id'] == $_SESSION['user_id'] || $_SESSION['is_admin']) { ?>
+                <?php if ($comment['user_id'] == $_SESSION['user_id'] || (isset($_SESSION['is_admin']) && $_SESSION['is_admin'])) { ?>
                   <form method="POST" action="home.php" style="display:inline;">
                     <input type="hidden" name="comment_id" value="<?= $comment['comment_id'] ?>">
                     <button type="submit" name="delete_comment" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
