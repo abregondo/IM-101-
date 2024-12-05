@@ -12,7 +12,17 @@ body {
     padding: 20px;
     font-size: 16px;
 }
-
+nav a {
+    text-decoration: none;
+    margin-right: 20px; 
+    font-weight: bold; 
+    color: #333; 
+  }
+  
+  nav a:hover {
+    color: #007bff;
+  }
+  
 /* Header Section */
 header {
     display: flex;

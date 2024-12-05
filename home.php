@@ -37,7 +37,7 @@ if (isset($_POST['create_post'])) {
         }
     }
 
-    // Insert the new post into the database if not a duplicate
+    // Insert the new post into the database
     $insert_post = "INSERT INTO posts (user_id, content, file_path, created_at) VALUES (:user_id, :content, :file_path, NOW())";
     $stmt = $pdo->prepare($insert_post);
     $stmt->execute([ 
@@ -46,7 +46,7 @@ if (isset($_POST['create_post'])) {
         'file_path' => $post_file 
     ]);
 
-    // Redirect after successful form submission to prevent resubmission
+    // Redirect after successful form submission
     header('Location: home.php');
     exit();
 }
@@ -71,12 +71,21 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <!-- Header Section -->
+  <!-- Header Section with Navbar -->
   <header>
     <div class="header-left">
       <h1 class="app-name">Chattrix</h1>
     </div>
     <div class="header-right">
+      <!-- Navbar Links -->
+      <nav>
+        <a href="home.php">Home</a>
+        <a href="profile.php">Profile</a>
+        <a href="messages.php">Messages</a>
+        <a href="notification.php">Notifications</a>
+        <a href="settings.php">Settings</a>
+      </nav>
+      <!-- Notification and Message Buttons -->
       <a href="notification.php"><button id="notifBtn">🔔</button></a>
       <a href="messages.php"><button id="msgBtn">💬</button></a>
     </div>
@@ -120,7 +129,6 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <button class="like-btn">❤️</button>
           <button class="comment-btn">💬</button>
           <button class="share-btn">🔄</button>
-          <!-- Add logic for deleting posts if user is the author -->
         </div>
       </div>
     <?php } ?>
