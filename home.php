@@ -55,12 +55,12 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([$_SESSION['user_id']]);
 $following_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch user posts
-$sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
+// Fetch user posts (ensure no duplicates)
+$sql = "SELECT DISTINCT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
                u.id AS user_id, u.email, u.profile_picture 
         FROM posts p 
         INNER JOIN users u ON p.user_id = u.id
-        ORDER BY p.created_at DESC"; 
+        ORDER BY p.created_at DESC"; // Get posts ordered by created_at
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -206,7 +206,7 @@ if (isset($_POST['comment_post_id']) && isset($_POST['comment_content'])) {
 
     function toggleCommentSection(postId) {
       const commentSection = document.getElementById('commentSection' + postId);
-      commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+      commentSection.style.display = commentSection.style.display === "none" ? "block" : "none";
     }
   </script>
 </body>
