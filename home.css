@@ -129,8 +129,9 @@ header {
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 24px; /* Adjust font size for landscape icon */
+  font-size: 30px; /* Adjusted for larger landscape view */
   cursor: pointer;
+  transform: rotate(90deg); /* This rotates the icon to make it landscape */
 }
 
 .menu-options {
@@ -160,12 +161,8 @@ header {
   background-color: #444;
 }
 
-/* Toggle menu display on click */
-.menu-btn:focus {
-  outline: none;
-}
-
-.menu-btn:hover + .menu-options,
+/* Show options when menu button is clicked */
+.menu-btn:focus + .menu-options,
 .menu-options:hover {
   display: block;
 }
