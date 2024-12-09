@@ -34,6 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
     }
 }
 
+// Handle post deletion
+if (isset($_POST['delete_post'])) {
+    $post_id = $_POST['post_id'];
+    $delete_query = "DELETE FROM posts WHERE id = :post_id AND user_id = :user_id";
+    $stmt = $pdo->prepare($delete_query);
+    $stmt->execute([
+        'post_id' => $post_id,
+        'user_id' => $_SESSION['user_id']
+    ]);
+    header("Location: home.php");
+    exit();
+}
+
 // Fetch all posts
 $sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
                u.id AS user_id, u.email, u.profile_picture 
@@ -84,6 +97,20 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <strong><?= htmlspecialchars($post['email']) ?></strong>
             <p class="timestamp"><?= htmlspecialchars($post['post_created_at']) ?></p>
           </div>
+          <?php if ($post['user_id'] === $_SESSION['user_id']) { ?>
+          <!-- Three-dot menu -->
+          <div class="post-menu">
+            <button class="menu-btn">⋮</button>
+            <div class="menu-options">
+              <form method="POST" action="home.php" style="display:inline;">
+                <input type="hidden" name="post_id" value="<?= $post['post_id'] ?>">
+                <button type="submit" name="delete_post">Delete</button>
+              </form>
+              <!-- Add logic for editing here -->
+              <button onclick="editPost(<?= $post['post_id'] ?>)">Edit</button>
+            </div>
+          </div>
+          <?php } ?>
         </div>
         <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
         <div class="post-actions">
@@ -104,5 +131,11 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </footer>
 
   <script src="home.js"></script>
+  <script>
+    function editPost(postId) {
+      alert("Editing post with ID: " + postId);
+      // Logic to handle editing post can be added here
+    }
+  </script>
 </body>
 </html>

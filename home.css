@@ -15,9 +15,9 @@ body {
 
 nav a {
   text-decoration: none;
-  margin-right: 20px; 
-  font-weight: bold; 
-  color: #333; 
+  margin-right: 20px;
+  font-weight: bold;
+  color: #333;
 }
 
 nav a:hover {
@@ -203,6 +203,50 @@ footer button {
 footer button:hover {
   background-color: #333;
   border-radius: 50%;
+}
+
+/* Three-Dot Menu Styles */
+.post-menu {
+  position: relative;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.menu-options {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 0;
+  background-color: #2a2a2a;
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 100;
+}
+
+.menu-options button {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 5px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.menu-options button:hover {
+  background-color: #444;
+}
+
+.menu-btn:focus + .menu-options,
+.menu-options:hover {
+  display: block;
 }
 
 /* Media Queries for Responsiveness */
