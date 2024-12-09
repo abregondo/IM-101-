@@ -1,20 +1,25 @@
-/* General styles */
+/* General Styles */
+html, body {
+  height: 100%; /* Ensure the body and html fill the full height */
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Ensure the body uses flexbox to fill the screen */
 }
 
 header {
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px; /* Adjust padding for the height of the header */
+  padding: 10px 20px;
   background-color: #333;
   color: #fff;
-  width: 100%;
-  box-sizing: border-box;
+  height: 50px; /* Set the header height to 50px */
+  box-sizing: border-box; /* Include padding and border in the height */
 }
 
 header .header-left h1 {
@@ -34,6 +39,7 @@ header .header-right button {
   cursor: pointer;
 }
 
+/* Create Post Section */
 .create-post-section {
   padding: 20px;
   background-color: #fff;
@@ -98,14 +104,14 @@ header .header-right button {
 footer {
   display: flex;
   justify-content: space-around;
-  padding: 15px 0;
-  background-color: #1e1e1e;
-  border-top: 1px solid #333;
-  position: fixed;
+  align-items: center; /* Vertically center the content */
+  background-color: #333;
+  color: #fff;
   width: 100%;
-  bottom: 0;
-  left: 0;
-  height: 50px;
+  height: 50px; /* Set footer height explicitly */
+  box-sizing: border-box;
+  padding: 0 20px; /* Horizontal padding */
+  margin: 0;
 }
 
 footer button {
@@ -114,6 +120,4 @@ footer button {
   color: #fff;
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0; /* Remove button padding */
 }
-
