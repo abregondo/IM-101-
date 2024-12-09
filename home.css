@@ -1,34 +1,29 @@
-/* General Styles */
-html, body {
-  height: 100%; /* Ensure the body and html fill the full height */
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
   margin: 0;
   padding: 0;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  display: flex;
-  flex-direction: column; /* Ensure the body uses flexbox to fill the screen */
-}
-
+/* Header */
 header {
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
+  align-items: center;
   background-color: #333;
   color: #fff;
-  height: 50px; /* Set the header height to 50px */
-  box-sizing: border-box; /* Include padding and border in the height */
+  padding: 10px 20px;
 }
 
 header .header-left h1 {
   margin: 0;
 }
 
-header .header-right {
-  display: flex;
-  gap: 10px;
+header .header-right a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
 }
 
 header .header-right button {
@@ -41,17 +36,22 @@ header .header-right button {
 
 /* Create Post Section */
 .create-post-section {
-  padding: 20px;
-  background-color: #fff;
-  margin: 20px 0;
+  margin: 20px;
+}
+
+.create-post-section form {
+  display: flex;
+  flex-direction: column;
 }
 
 .create-post-section textarea {
   width: 100%;
-  height: 100px;
   padding: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 1rem;
+  height: 100px;
 }
 
 .create-post-section button {
@@ -63,10 +63,13 @@ header .header-right button {
   cursor: pointer;
 }
 
-/* Post Feed */
+.create-post-section button:hover {
+  background-color: #444;
+}
+
+/* Feed Section */
 .feed {
-  padding: 20px;
-  background-color: #fff;
+  margin: 20px;
 }
 
 .post {
@@ -79,39 +82,114 @@ header .header-right button {
 
 .post-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .post-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  object-fit: cover;
+  margin-right: 10px;
 }
 
 .post-info {
-  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
+.timestamp {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.post-content {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+/* Post Actions (Like, Comment, Share) */
 .post-actions {
   display: flex;
-  gap: 10px;
+  gap: 15px;
+}
+
+.like-btn,
+.comment-btn,
+.share-btn {
+  font-size: 1.5rem;
+  padding: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.like-btn:hover,
+.comment-btn:hover,
+.share-btn:hover {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+}
+
+.like-btn {
+  color: red;
+}
+
+.comment-btn {
+  color: blue;
+}
+
+/* Comment Section */
+.comment-section {
   margin-top: 10px;
+  display: none;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.comment-section button {
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment-section button:hover {
+  background-color: #444;
+}
+
+.comments-display {
+  margin-top: 10px;
+}
+
+.comments-display div {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.comment-count {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 /* Footer Section */
 footer {
   display: flex;
   justify-content: space-around;
-  align-items: center; /* Vertically center the content */
+  align-items: center;
   background-color: #333;
   color: #fff;
-  width: 100%;
-  height: 50px; /* Set footer height explicitly */
-  box-sizing: border-box;
-  padding: 0 20px; /* Horizontal padding */
-  margin: 0;
+  padding: 10px;
 }
 
 footer button {
@@ -120,4 +198,8 @@ footer button {
   color: #fff;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+footer button:hover {
+  background-color: #444;
 }

@@ -108,9 +108,17 @@ if ($posts_result === false) {
           </div>
           <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
           <div class="post-actions">
-            <button class="like-btn">❤️</button>
-            <button class="comment-btn">💬</button>
+            <button class="like-btn" onclick="likePost(this)">❤️</button>
+            <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
             <button class="share-btn">🔄</button>
+          </div>
+
+          <!-- Comment Section (Initially Hidden) -->
+          <div class="comment-section" style="display: none;">
+            <textarea class="comment-input" placeholder="Write a comment..."></textarea>
+            <button onclick="postComment(event)">Post Comment</button>
+            <div class="comments-display"></div>
+            <p class="comment-count">0 Comments</p>
           </div>
         </div>
       <?php endforeach; ?>
