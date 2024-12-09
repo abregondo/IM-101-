@@ -120,6 +120,7 @@ header {
   color: #888;
 }
 
+/* Three-Dot Menu */
 .menu {
   position: relative;
 }
@@ -128,7 +129,7 @@ header {
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 24px; /* Adjust font size for landscape icon */
   cursor: pointer;
 }
 
@@ -157,6 +158,11 @@ header {
 
 .menu-options button:hover {
   background-color: #444;
+}
+
+/* Toggle menu display on click */
+.menu-btn:focus {
+  outline: none;
 }
 
 .menu-btn:hover + .menu-options,

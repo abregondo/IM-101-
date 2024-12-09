@@ -100,13 +100,12 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <?php if ($post['user_id'] === $_SESSION['user_id']) { ?>
           <!-- Three-dot menu -->
           <div class="post-menu">
-            <button class="menu-btn">⋮</button>
+            <button class="menu-btn">⋯</button>
             <div class="menu-options">
               <form method="POST" action="home.php" style="display:inline;">
                 <input type="hidden" name="post_id" value="<?= $post['post_id'] ?>">
                 <button type="submit" name="delete_post">Delete</button>
               </form>
-              <!-- Add logic for editing here -->
               <button onclick="editPost(<?= $post['post_id'] ?>)">Edit</button>
             </div>
           </div>
@@ -136,7 +135,6 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     function editPost(postId) {
       alert("Editing post with ID: " + postId);
       // Logic to handle editing post can be added here
-      // For example, you could redirect to an edit page or open a modal
     }
 
     // JavaScript to toggle the menu options
