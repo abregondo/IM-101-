@@ -1,13 +1,7 @@
-/* Basic Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* General styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  background-color: #f4f4f4;
   margin: 0;
   padding: 0;
 }
@@ -20,131 +14,130 @@ header {
   color: #fff;
 }
 
-.header-left h1 {
-  font-size: 24px;
+header .header-left h1 {
+  margin: 0;
 }
 
-.header-right button {
+header .header-right {
+  display: flex;
+  gap: 10px;
+}
+
+header .header-right button {
   background: none;
   border: none;
   color: #fff;
-  font-size: 20px;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
 .create-post-section {
-  margin: 20px;
-  background-color: white;
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  margin: 20px 0;
 }
 
 .create-post-section textarea {
   width: 100%;
   height: 100px;
   padding: 10px;
-  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 .create-post-section button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
   border: none;
-  cursor: pointer;
   border-radius: 5px;
+  cursor: pointer;
 }
 
+/* Post Feed */
 .feed {
-  margin: 20px;
+  padding: 20px;
+  background-color: #fff;
 }
 
 .post {
-  background-color: white;
-  padding: 15px;
   margin-bottom: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 }
 
 .post-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
 }
 
 .post-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
+  object-fit: cover;
 }
 
 .post-info {
-  flex-grow: 1;
+  margin-left: 10px;
 }
 
-.post-content {
-  margin-top: 10px;
-}
-
-.post-actions {
-  margin-top: 10px;
-}
-
-.post-actions button {
-  margin-right: 10px;
+.post-menu {
+  position: relative;
 }
 
 .menu-btn {
-  position: absolute;
-  right: 0;
-  top: 0;
   background: none;
   border: none;
-  color: #333;
-  font-size: 18px;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
 .menu-options {
   display: none;
   position: absolute;
+  top: 0;
   right: 0;
-  top: 30px;
   background-color: white;
-  border: 1px solid #ddd;
-  padding: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 120px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
 
 .menu-options button {
-  width: 100%;
-  padding: 8px;
   background: none;
   border: none;
-  text-align: left;
+  padding: 10px;
   cursor: pointer;
 }
 
+.menu-options button:hover {
+  background-color: #f0f0f0;
+}
+
+.post-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Footer Section */
 footer {
   display: flex;
   justify-content: space-around;
   padding: 10px;
   background-color: #333;
+  color: #fff;
 }
 
 footer button {
   background: none;
   border: none;
   color: #fff;
-  font-size: 20px;
+  font-size: 1.5rem;
   cursor: pointer;
 }
