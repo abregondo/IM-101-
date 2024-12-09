@@ -4,6 +4,7 @@ body {
   background-color: #f4f4f4;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 header {
@@ -12,6 +13,10 @@ header {
   padding: 10px 20px;
   background-color: #333;
   color: #fff;
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding/borders are included */
+  max-width: 1200px; /* Optional: Adjust based on your desired max width */
+  margin: 0 auto; /* Centers the header */
 }
 
 header .header-left h1 {
@@ -98,6 +103,10 @@ footer {
   padding: 10px;
   background-color: #333;
   color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 1200px; /* Ensure the footer is the same width as the header */
+  margin: 0 auto; /* Centers the footer */
 }
 
 footer button {
