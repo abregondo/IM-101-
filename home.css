@@ -95,18 +95,17 @@ header .header-right button {
 }
 
 /* Footer Section */
+/* Footer Section */
 footer {
   display: flex;
   justify-content: space-around;
-  align-items: center; /* Vertically center the footer items */
-  padding: 10px 20px; /* Padding for consistent spacing */
+  align-items: center; /* Center the buttons vertically */
+  padding: 0 20px; /* Remove padding on top and bottom, keep horizontal padding */
   background-color: #333;
   color: #fff;
   width: 100%;
   box-sizing: border-box;
-  margin: 0 auto;
-  height: 30px; /* Set the height of the footer */
-  max-width: 1200px; /* Optional: Keep the footer width the same as the header */
+  height: 50px; /* Set the footer height to 50px */
 }
 
 footer button {
@@ -115,4 +114,5 @@ footer button {
   color: #fff;
   font-size: 1.5rem;
   cursor: pointer;
+  padding: 0; /* Remove padding inside the button to avoid height issues */
 }
