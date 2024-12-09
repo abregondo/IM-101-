@@ -105,7 +105,7 @@ footer {
   width: 100%;
   box-sizing: border-box;
   margin: 0 auto;
-  height: 60px; /* Set the height of the footer */
+  height: 30px; /* Set the height of the footer */
   max-width: 1200px; /* Optional: Keep the footer width the same as the header */
 }
 
