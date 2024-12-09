@@ -130,14 +130,6 @@ if ($posts_result === false) {
     <?php endif; ?>
   </div>
 
-  <!-- Footer Section -->
-  <footer>
-    <a href="home.php"><button>🏠</button></a>
-    <a href="search.php"><button>🔍</button></a>
-    <a href="create_post.php"><button id="createPostBtn">✍️</button></a>
-    <a href="profile.php"><button>👤</button></a>
-  </footer>
-
   <script src="home.js"></script>
 </body>
 </html>

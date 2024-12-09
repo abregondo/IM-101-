@@ -66,6 +66,7 @@ header .header-right button {
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
+  position: relative; /* Important for positioning the menu */
 }
 
 .post-header {
@@ -86,7 +87,9 @@ header .header-right button {
 }
 
 .post-menu {
-  position: relative;
+  position: absolute;
+  top: 10px; /* Adjust the distance from the top */
+  right: 10px; /* Adjust the distance from the right edge */
 }
 
 .menu-btn {
