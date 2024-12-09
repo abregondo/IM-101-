@@ -1,134 +1,131 @@
 /* General Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
 body {
-    background-color: #121212; /* Dark gray background */
-    color: #e0e0e0; /* Light gray text */
-    padding: 20px;
-    font-size: 16px;
+  background-color: #121212;
+  color: #e0e0e0;
+  padding: 20px;
+  font-size: 16px;
 }
+
 nav a {
-    text-decoration: none;
-    margin-right: 20px; 
-    font-weight: bold; 
-    color: #333; 
-  }
-  
-  nav a:hover {
-    color: #007bff;
-  }
-  
+  text-decoration: none;
+  margin-right: 20px; 
+  font-weight: bold; 
+  color: #333; 
+}
+
+nav a:hover {
+  color: #007bff;
+}
+
 /* Header Section */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #1e1e1e;
-    border-bottom: 1px solid #333;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .header-left h1 {
-    font-size: 26px;
-    font-weight: bold;
-    color: #ffffff;
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffffff;
 }
 
 .header-right {
-    display: flex;
-    gap: 15px;
+  display: flex;
+  gap: 15px;
 }
 
 .header-right button {
-    background: none;
-    border: 2px solid #555;
-    border-radius: 50%;
-    padding: 8px;
-    width: 40px;
-    height: 40px;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background: none;
+  border: 2px solid #555;
+  border-radius: 50%;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header-right button:hover {
-    background-color: #333;
+  background-color: #333;
 }
 
 /* Error Message Styles */
 #errorMessage {
-    color: #ff4d4d;
-    background-color: #ffe5e5;
-    border: 1px solid #ffcccc;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    display: none; /* Hidden by default */
+  color: #ff4d4d;
+  background-color: #ffe5e5;
+  border: 1px solid #ffcccc;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  display: none; /* Hidden by default */
 }
 
 #errorMessage p {
-    margin: 0;
-    font-size: 14px;
+  margin: 0;
+  font-size: 14px;
 }
 
 /* Create Post Section */
 .create-post-section {
-    margin-top: 20px;
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 8px;
-   
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-}
-.create-post-section {
-    margin-bottom: 20px;
+  margin-top: 20px;
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .create-post-section textarea {
-    width: 100%;
-    height: 80px;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 10px;
-    background-color: #242424;
-    color: #e0e0e0;
-    font-size: 16px;
-    margin-bottom: 10px;
-    resize: none;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #242424;
+  color: #e0e0e0;
+  font-size: 16px;
+  margin-bottom: 10px;
+  resize: none;
 }
 
 .create-post-section button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    background-color: #3b82f6;
-    color: #ffffff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #3b82f6;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .create-post-section button:hover {
-    background-color: #2563eb;
+  background-color: #2563eb;
 }
 
 /* Post Styling */
 .post {
-  background-color: #2a2a2a; /* Darker background for better contrast */
-  border: 1px solid #333; /* Darker border to match the background */
-  border-radius: 10px; /* Rounded corners for a smoother look */
-  margin-bottom: 20px; /* Space between posts */
-  padding: 15px; /* Padding inside the post */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Slightly darker shadow for depth */
+  background-color: #2a2a2a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
 }
@@ -142,7 +139,7 @@ header {
 .post-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* Circular avatar */
+  border-radius: 50%;
   margin-right: 10px;
 }
 
@@ -180,123 +177,88 @@ header {
   background-color: #f0f0f0;
 }
 
-/* Post Stats */
-.post-stats {
-  font-size: 14px;
-  color: #555;
-}
-
-/* Comment Section */
-.comment-section {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #ddd;
-}
-
-textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
 /* Footer Navigation */
 footer {
-    display: flex;
-    justify-content: space-around;
-    padding: 15px 0;
-    background-color: #1e1e1e;
-    border-top: 1px solid #333;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    left: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 0;
+  background-color: #1e1e1e;
+  border-top: 1px solid #333;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
 }
 
 footer button {
-    font-size: 24px;
-    padding: 10px;
-    background: none;
-    border: none;
-    color: #ffffff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  font-size: 24px;
+  padding: 10px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 footer button:hover {
-    background-color: #333;
-    border-radius: 50%;
+  background-color: #333;
+  border-radius: 50%;
 }
 
 /* Media Queries for Responsiveness */
 @media (max-width: 430px) {
-    /* Adjustments for mobile */
-    body {
-        padding: 10px;
-    }
+  body {
+      padding: 10px;
+  }
 
-    header {
-        flex-direction: column;
-        padding: 10px;
-    }
+  header {
+      flex-direction: column;
+      padding: 10px;
+  }
 
-    .header-left h1 {
-        font-size: 18px;
-        text-align: center;
-    }
+  .header-left h1 {
+      font-size: 18px;
+      text-align: center;
+  }
 
-    .header-right {
-        margin-top: 5px;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
+  .header-right {
+      margin-top: 5px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+  }
 
-    .create-post-section textarea {
-        font-size: 14px;
-    }
+  .create-post-section textarea {
+      font-size: 14px;
+  }
 
-    .post {
-        padding: 10px;
-        margin-bottom: 15px;
-    }
+  .post {
+      padding: 10px;
+      margin-bottom: 15px;
+  }
 
-    .post-header {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-bottom: 10px;
-    }
+  .post-header {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 10px;
+  }
 
-    .post-avatar {
-        margin-bottom: 5px;
-    }
+  .post-avatar {
+      margin-bottom: 5px;
+  }
 
-    .post-actions {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .post-actions {
+      flex-direction: column;
+      align-items: flex-start;
+  }
 
-    footer {
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-    }
+  footer {
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+  }
 
-    footer button {
-        font-size: 20px;
-        padding: 8px;
-    }
+  footer button {
+      font-size: 20px;
+      padding: 8px;
+  }
 }
