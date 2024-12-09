@@ -2,26 +2,19 @@
 
 // Function to handle likes
 function likePost(button) {
-  const likeCount = button.closest('.post').querySelector('#likeCount');
+  const likeCount = button.closest('.post').querySelector('.like-count');
   let likes = parseInt(likeCount.innerText.split(' ')[0]);
   likes += 1;
-  likeCount.innerText = `${likes} Likes`;
+  likeCount.innerText = `${likes} Likes`; // Update the like count
   button.disabled = true; // Disable the like button once liked
+  button.style.color = 'red'; // Optional: Change the color of the like button after it's clicked
 }
 
 // Function to toggle the comment section visibility
 function toggleCommentSection(event) {
   const postElement = event.target.closest('.post');
   const commentSection = postElement.querySelector('.comment-section');
-  const isVisible = commentSection.style.display === 'block';
-  
-  // Hide all comment sections in other posts
-  document.querySelectorAll('.comment-section').forEach((section) => {
-    if (section !== commentSection) section.style.display = 'none';
-  });
-  
-  // Toggle visibility of the clicked post's comment section
-  commentSection.style.display = isVisible ? 'none' : 'block';
+  commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
 }
 
 // Function to handle posting a comment
