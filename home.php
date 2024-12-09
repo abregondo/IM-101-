@@ -9,17 +9,29 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Handle form submission for creating a new post (text only)
-if (isset($_POST['create_post'])) {
-    $post_content = $_POST['post_content'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
+    $post_content = trim($_POST['post_content']);
     $user_id = $_SESSION['user_id'];
 
-    // Insert the new post into the database
-    $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
-    $stmt = $pdo->prepare($insert_post);
-    $stmt->execute([
-        'user_id' => $user_id, 
-        'content' => $post_content
-    ]);
+    // Prevent empty or duplicate submissions
+    if (!empty($post_content)) {
+        $check_duplicate = "SELECT COUNT(*) FROM posts WHERE user_id = :user_id AND content = :content";
+        $stmt = $pdo->prepare($check_duplicate);
+        $stmt->execute([
+            'user_id' => $user_id,
+            'content' => $post_content
+        ]);
+        $duplicate_count = $stmt->fetchColumn();
+
+        if ($duplicate_count == 0) { // Insert only if not a duplicate
+            $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
+            $stmt = $pdo->prepare($insert_post);
+            $stmt->execute([
+                'user_id' => $user_id,
+                'content' => $post_content
+            ]);
+        }
+    }
 }
 
 // Fetch all posts
@@ -27,6 +39,7 @@ $sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_
                u.id AS user_id, u.email, u.profile_picture 
         FROM posts p 
         INNER JOIN users u ON p.user_id = u.id
+        GROUP BY p.id 
         ORDER BY p.created_at DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -66,13 +79,13 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php foreach ($posts_result as $post) { ?>
       <div class="post">
         <div class="post-header">
-          <img src="<?= $post['profile_picture'] ?>" alt="User" class="post-avatar">
+          <img src="<?= htmlspecialchars($post['profile_picture']) ?>" alt="User" class="post-avatar">
           <div class="post-info">
-            <strong><?= $post['email'] ?></strong>
-            <p class="timestamp"><?= $post['post_created_at'] ?></p>
+            <strong><?= htmlspecialchars($post['email']) ?></strong>
+            <p class="timestamp"><?= htmlspecialchars($post['post_created_at']) ?></p>
           </div>
         </div>
-        <p class="post-content"><?= $post['post_content'] ?></p>
+        <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
         <div class="post-actions">
           <button class="like-btn">❤️</button>
           <button class="comment-btn">💬</button>
