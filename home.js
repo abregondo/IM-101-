@@ -2,24 +2,22 @@
 const menuBtns = document.querySelectorAll('.menu-btn');
 menuBtns.forEach(menuBtn => {
   menuBtn.addEventListener('click', function(event) {
-    event.stopPropagation(); // Prevents event bubbling to document click listener
-    const menuOptions = this.nextElementSibling; // Get the associated menu
+    // Close any open menus before opening the clicked one
+    const menuOptions = this.nextElementSibling;
     const isVisible = menuOptions.style.display === 'block';
-    
-    // Close all menus first
     document.querySelectorAll('.menu-options').forEach(menu => {
-      menu.style.display = 'none';
+      if (menu !== menuOptions) {
+        menu.style.display = 'none';
+      }
     });
-    
-    // Toggle the visibility of the clicked menu
+    // Toggle the clicked menu's visibility
     menuOptions.style.display = isVisible ? 'none' : 'block';
   });
 });
 
-// Close all menus when clicking anywhere outside the menu
+// Close menus when clicking outside
 document.addEventListener("click", function(event) {
-  // If the click is not on a menu button or inside a menu, close all menus
-  if (!event.target.closest('.menu-btn') && !event.target.closest('.menu-options')) {
+  if (!event.target.closest('.menu')) {
     document.querySelectorAll('.menu-options').forEach(menu => {
       menu.style.display = 'none';
     });
@@ -28,7 +26,7 @@ document.addEventListener("click", function(event) {
 
 // Function to handle likes
 function likePost(button) {
-  const likeCount = button.closest('.post').querySelector('.like-count');
+  const likeCount = document.getElementById('likeCount');
   let likes = parseInt(likeCount.innerText.split(' ')[0]);
   likes += 1;
   likeCount.innerText = `${likes} Likes`;
@@ -39,10 +37,7 @@ function likePost(button) {
 function toggleCommentSection(event) {
   const postElement = event.target.closest('.post');
   const commentSection = postElement.querySelector('.comment-section');
-  const currentDisplay = commentSection.style.display;
-
-  // Toggle comment section visibility
-  commentSection.style.display = currentDisplay === 'none' || currentDisplay === '' ? 'block' : 'none';
+  commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
 }
 
 // Function to handle posting a comment
@@ -75,6 +70,19 @@ function postComment(event) {
   }
 }
 
+// Function to toggle menu options
+function toggleMenu(event) {
+  const menu = event.target.nextElementSibling;
+  
+  // Hide other menus
+  document.querySelectorAll('.menu-options').forEach((opt) => {
+    if (opt !== menu) opt.style.display = 'none';
+  });
+  
+  // Toggle the current menu
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
 // Function to edit a post
 function editPost(event) {
   const postContent = event.target.closest('.post').querySelector('.post-content');
@@ -94,14 +102,7 @@ function deletePost(event) {
 document.addEventListener("DOMContentLoaded", () => {
   // Three-dot menu toggle
   document.querySelectorAll(".menu-btn").forEach((btn) => {
-    btn.addEventListener("click", function(event) {
-      const menu = event.target.nextElementSibling;
-      // Hide other menus
-      document.querySelectorAll('.menu-options').forEach((opt) => {
-        if (opt !== menu) opt.style.display = 'none';
-      });
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    });
+    btn.addEventListener("click", toggleMenu);
   });
 
   // Edit post
