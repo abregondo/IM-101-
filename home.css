@@ -98,14 +98,14 @@ header .header-right button {
 footer {
   display: flex;
   justify-content: space-around;
-  align-items: center; /* Center items vertically */
-  background-color: #333;
-  color: #fff;
+  padding: 15px 0;
+  background-color: #1e1e1e;
+  border-top: 1px solid #333;
+  position: fixed;
   width: 100%;
-  min-height: 50px; /* Set a minimum height for the footer */
-  box-sizing: border-box;
-  padding: 0 20px; /* Horizontal padding */
-  margin: 0; /* Reset any default margin */
+  bottom: 0;
+  left: 0;
+  height: 50px;
 }
 
 footer button {
