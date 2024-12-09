@@ -10,7 +10,7 @@ body {
 header {
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 20px; /* Adjust padding to set height */
   background-color: #333;
   color: #fff;
   width: 100%;
@@ -100,13 +100,15 @@ header .header-right button {
 footer {
   display: flex;
   justify-content: space-around;
-  padding: 10px;
+  align-items: center; /* Aligns items vertically to center */
+  padding: 10px 20px; /* Adjust padding for footer height */
   background-color: #333;
   color: #fff;
   width: 100%;
   box-sizing: border-box;
   max-width: 1200px; /* Ensure the footer is the same width as the header */
   margin: 0 auto; /* Centers the footer */
+  height: 60px; /* Set a fixed height matching the header */
 }
 
 footer button {
