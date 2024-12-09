@@ -1,64 +1,3 @@
-<?php
-session_start();
-include('db.php'); // Include the database connection
-
-// Ensure user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: sign_in.php');
-    exit();
-}
-
-// Handle form submission for creating a new post (text only)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
-    $post_content = trim($_POST['post_content']);
-    $user_id = $_SESSION['user_id'];
-
-    // Prevent empty or duplicate submissions
-    if (!empty($post_content)) {
-        $check_duplicate = "SELECT COUNT(*) FROM posts WHERE user_id = :user_id AND content = :content";
-        $stmt = $pdo->prepare($check_duplicate);
-        $stmt->execute([
-            'user_id' => $user_id,
-            'content' => $post_content
-        ]);
-        $duplicate_count = $stmt->fetchColumn();
-
-        if ($duplicate_count == 0) { // Insert only if not a duplicate
-            $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
-            $stmt = $pdo->prepare($insert_post);
-            $stmt->execute([
-                'user_id' => $user_id,
-                'content' => $post_content
-            ]);
-        }
-    }
-}
-
-// Handle post deletion
-if (isset($_POST['delete_post'])) {
-    $post_id = $_POST['post_id'];
-    $delete_query = "DELETE FROM posts WHERE id = :post_id AND user_id = :user_id";
-    $stmt = $pdo->prepare($delete_query);
-    $stmt->execute([
-        'post_id' => $post_id,
-        'user_id' => $_SESSION['user_id']
-    ]);
-    header("Location: home.php");
-    exit();
-}
-
-// Fetch all posts
-$sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
-               u.id AS user_id, u.email, u.profile_picture 
-        FROM posts p 
-        INNER JOIN users u ON p.user_id = u.id
-        GROUP BY p.id 
-        ORDER BY p.created_at DESC";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,9 +52,15 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
         <div class="post-actions">
-          <button class="like-btn">❤️</button>
-          <button class="comment-btn">💬</button>
+          <button class="like-btn" onclick="likePost(this)">❤️</button>
+          <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
           <button class="share-btn">🔄</button>
+        </div>
+
+        <div class="comment-section">
+          <input type="text" id="commentInput" placeholder="Write a comment...">
+          <button onclick="postComment(event)">Post Comment</button>
+          <div id="commentsDisplay"></div>
         </div>
       </div>
     <?php } ?>
@@ -130,22 +75,5 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </footer>
 
   <script src="home.js"></script>
-  <script>
-    // Edit post functionality
-    function editPost(postId) {
-      alert("Editing post with ID: " + postId);
-      // Logic to handle editing post can be added here
-    }
-
-    // JavaScript to toggle the menu options
-    const menuBtns = document.querySelectorAll('.menu-btn');
-    menuBtns.forEach(menuBtn => {
-      menuBtn.addEventListener('click', function() {
-        const menuOptions = this.nextElementSibling;
-        const isVisible = menuOptions.style.display === 'block';
-        menuOptions.style.display = isVisible ? 'none' : 'block';
-      });
-    });
-  </script>
 </body>
 </html>
