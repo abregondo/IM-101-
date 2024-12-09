@@ -1,15 +1,4 @@
-// Function to toggle the menu options
-function toggleMenu(event) {
-  const menu = event.target.nextElementSibling;
-  
-  // Hide other menus
-  document.querySelectorAll('.menu-options').forEach((opt) => {
-    if (opt !== menu) opt.style.display = 'none';
-  });
-
-  // Toggle the current menu visibility
-  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
+// JavaScript to handle likes and comments
 
 // Function to handle likes
 function likePost(button) {
@@ -56,45 +45,3 @@ function postComment(event) {
     commentsDisplay.scrollTop = commentsDisplay.scrollHeight;
   }
 }
-
-// Function to edit a post
-function editPost(event) {
-  const postContent = event.target.closest('.post').querySelector('.post-content');
-  const newText = prompt("Edit your post:", postContent.textContent);
-  if (newText) postContent.textContent = newText;
-}
-
-// Function to delete a post
-function deletePost(event) {
-  const post = event.target.closest('.post');
-  if (confirm("Are you sure you want to delete this post?")) {
-    post.remove();
-  }
-}
-
-// Event listeners for menu options and actions
-document.addEventListener("DOMContentLoaded", () => {
-  // Three-dot menu toggle
-  document.querySelectorAll(".menu-btn").forEach((btn) => {
-    btn.addEventListener("click", toggleMenu);
-  });
-
-  // Edit post
-  document.querySelectorAll(".edit-btn").forEach((btn) => {
-    btn.addEventListener("click", editPost);
-  });
-
-  // Delete post
-  document.querySelectorAll(".delete-btn").forEach((btn) => {
-    btn.addEventListener("click", deletePost);
-  });
-
-  // Close menus if clicking outside
-  document.addEventListener("click", (e) => {
-    if (!e.target.matches(".menu-btn, .menu-options, .menu-options *")) {
-      document.querySelectorAll(".menu-options").forEach((menu) => {
-        menu.style.display = "none";
-      });
-    }
-  });
-});

@@ -66,7 +66,6 @@ header .header-right button {
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
-  position: relative; /* Important for positioning the menu */
 }
 
 .post-header {
@@ -84,42 +83,6 @@ header .header-right button {
 
 .post-info {
   margin-left: 10px;
-}
-
-.post-menu {
-  position: absolute;
-  top: 10px; /* Adjust the distance from the top */
-  right: 10px; /* Adjust the distance from the right edge */
-}
-
-.menu-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.menu-options {
-  display: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-}
-
-.menu-options button {
-  background: none;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.menu-options button:hover {
-  background-color: #f0f0f0;
 }
 
 .post-actions {

@@ -105,19 +105,6 @@ if ($posts_result === false) {
               <strong><?= htmlspecialchars($post['email']) ?></strong>
               <p class="timestamp"><?= htmlspecialchars($post['post_created_at']) ?></p>
             </div>
-            <?php if ($post['user_id'] === $_SESSION['user_id']): ?>
-            <!-- Three-dot menu -->
-            <div class="post-menu">
-              <button class="menu-btn">⋯</button>
-              <div class="menu-options">
-                <form method="POST" action="home.php" style="display:inline;">
-                  <input type="hidden" name="post_id" value="<?= $post['post_id'] ?>">
-                  <button type="submit" name="delete_post">Delete</button>
-                </form>
-                <button onclick="editPost(<?= $post['post_id'] ?>)">Edit</button>
-              </div>
-            </div>
-            <?php endif; ?>
           </div>
           <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
           <div class="post-actions">
@@ -129,6 +116,14 @@ if ($posts_result === false) {
       <?php endforeach; ?>
     <?php endif; ?>
   </div>
+
+  <!-- Footer Section -->
+  <footer>
+    <a href="home.php"><button>🏠</button></a>
+    <a href="search.php"><button>🔍</button></a>
+    <a href="create_post.php"><button id="createPostBtn">✍️</button></a>
+    <a href="profile.php"><button>👤</button></a>
+  </footer>
 
   <script src="home.js"></script>
 </body>
