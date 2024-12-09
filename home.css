@@ -132,6 +132,9 @@ header {
   font-size: 30px; /* Adjusted for larger landscape view */
   cursor: pointer;
   transform: rotate(90deg); /* This rotates the icon to make it landscape */
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .menu-options {
