@@ -1,4 +1,4 @@
-/* General Styles */
+/* Reset default styling */
 * {
   margin: 0;
   padding: 0;
@@ -9,11 +9,9 @@
 body {
   background-color: #121212;
   color: #e0e0e0;
-  padding: 20px;
   font-size: 16px;
 }
 
-/* Header Section */
 header {
   display: flex;
   justify-content: space-between;
@@ -21,69 +19,50 @@ header {
   padding: 10px 20px;
   background-color: #1e1e1e;
   border-bottom: 1px solid #333;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .header-left h1 {
   font-size: 26px;
-  font-weight: bold;
   color: #ffffff;
 }
 
 .header-right button {
   background: none;
-  border: 2px solid #555;
-  border-radius: 50%;
-  padding: 8px;
-  width: 40px;
-  height: 40px;
-  color: #fff;
+  border: none;
+  color: #ffffff;
+  font-size: 20px;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-.header-right button:hover {
-  background-color: #333;
-}
-
-/* Create Post Section */
 .create-post-section {
-  margin-top: 20px;
-  background-color: #1e1e1e;
+  background-color: #2a2a2a;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  margin: 20px;
+  border-radius: 10px;
 }
 
 .create-post-section textarea {
   width: 100%;
-  height: 80px;
-  border: 1px solid #333;
-  border-radius: 8px;
   padding: 10px;
-  background-color: #242424;
-  color: #e0e0e0;
-  font-size: 16px;
-  margin-bottom: 10px;
-  resize: none;
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 5px;
+  resize: vertical;
 }
 
 .create-post-section button {
-  width: 100%;
+  background-color: #4CAF50;
+  color: white;
   padding: 10px;
   border: none;
-  border-radius: 8px;
-  background-color: #3b82f6;
-  color: #ffffff;
-  font-size: 16px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
 .create-post-section button:hover {
-  background-color: #2563eb;
+  background-color: #45a049;
 }
 
 /* Post Styling */
@@ -93,66 +72,57 @@ header {
   border-radius: 10px;
   margin-bottom: 20px;
   padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
 }
 
 .post-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  position: relative;
 }
 
 .post-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  margin-right: 15px;
 }
 
 .post-info {
-  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-info strong {
+  color: #fff;
 }
 
 .timestamp {
-  font-size: 12px;
-  color: #888;
-}
-
-/* Three-Dot Menu */
-.menu {
-  position: relative;
+  color: #aaa;
 }
 
 .menu-btn {
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 30px; /* Adjusted for larger landscape view */
+  font-size: 24px;
   cursor: pointer;
-  transform: rotate(90deg); /* This rotates the icon to make it landscape */
-  position: absolute;
-  top: 10px;
-  right: 10px;
 }
 
 .menu-options {
   display: none;
   position: absolute;
-  top: 25px;
+  top: 30px;
   right: 0;
   background-color: #333;
   border: 1px solid #555;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   z-index: 10;
 }
 
 .menu-options button {
-  display: block;
   width: 100%;
-  padding: 5px 10px;
+  padding: 10px;
   background: none;
   border: none;
   color: #fff;
@@ -164,36 +134,41 @@ header {
   background-color: #444;
 }
 
-/* Show options when menu button is clicked */
-.menu-btn:focus + .menu-options,
-.menu-options:hover {
-  display: block;
+.post-content {
+  margin-top: 10px;
+  color: #e0e0e0;
 }
 
-/* Footer Navigation */
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.post-actions button:hover {
+  color: #4CAF50;
+}
+
 footer {
   display: flex;
-  justify-content: space-around;
-  padding: 15px 0;
+  justify-content: space-between;
+  padding: 10px 20px;
   background-color: #1e1e1e;
   border-top: 1px solid #333;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  left: 0;
 }
 
 footer button {
-  font-size: 24px;
-  padding: 10px;
   background: none;
   border: none;
   color: #ffffff;
+  font-size: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-footer button:hover {
-  background-color: #333;
-  border-radius: 50%;
 }
