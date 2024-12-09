@@ -8,36 +8,17 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Handle form submission for creating a new post (text, photo, or video)
+// Handle form submission for creating a new post (text only)
 if (isset($_POST['create_post'])) {
     $post_content = $_POST['post_content'];
     $user_id = $_SESSION['user_id'];
 
-    // Handle file upload if present (retaining this functionality in case it's needed later)
-    $post_file = null;
-    if (isset($_FILES['post_file']) && $_FILES['post_file']['error'] == 0) {
-        $file_name = $_FILES['post_file']['name'];
-        $file_tmp = $_FILES['post_file']['tmp_name'];
-        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-        
-        $allowed_types = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mov', 'webm'];
-        if (in_array($file_ext, $allowed_types)) {
-            $file_new_name = uniqid() . '.' . $file_ext;
-            $file_upload_path = 'uploads/' . $file_new_name;
-
-            if (move_uploaded_file($file_tmp, $file_upload_path)) {
-                $post_file = $file_upload_path;
-            }
-        }
-    }
-
     // Insert the new post into the database
-    $insert_post = "INSERT INTO posts (user_id, content, file_path, created_at) VALUES (:user_id, :content, :file_path, NOW())";
+    $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
     $stmt = $pdo->prepare($insert_post);
     $stmt->execute([
         'user_id' => $user_id, 
-        'content' => $post_content, 
-        'file_path' => $post_file
+        'content' => $post_content
     ]);
 }
 
@@ -50,7 +31,6 @@ $sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -62,6 +42,7 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
+  <!-- Header Section -->
   <header>
     <div class="header-left">
       <h1 class="app-name">Chattrix</h1>
@@ -72,14 +53,15 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </header>
 
+  <!-- Create Post Section -->
   <div class="create-post-section">
-    <form method="POST" action="home.php" enctype="multipart/form-data">
+    <form method="POST" action="home.php">
       <textarea name="post_content" placeholder="What's on your mind?" required></textarea>
-      <input type="file" name="post_file" accept="image/*,video/*">
       <button type="submit" name="create_post">Post</button>
     </form>
   </div>
 
+  <!-- Feed Section -->
   <div class="feed">
     <?php foreach ($posts_result as $post) { ?>
       <div class="post">
@@ -91,7 +73,6 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
           </div>
         </div>
         <p class="post-content"><?= $post['post_content'] ?></p>
-
         <div class="post-actions">
           <button class="like-btn">❤️</button>
           <button class="comment-btn">💬</button>
@@ -101,6 +82,7 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php } ?>
   </div>
 
+  <!-- Footer Section -->
   <footer>
     <a href="home.php"><button>🏠</button></a>
     <a href="search.php"><button>🔍</button></a>
