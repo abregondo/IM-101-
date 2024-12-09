@@ -133,8 +133,8 @@ header {
   cursor: pointer;
   transform: rotate(90deg); /* This rotates the icon to make it landscape */
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 10px;
+  right: 10px;
 }
 
 .menu-options {
