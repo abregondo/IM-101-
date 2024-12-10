@@ -13,38 +13,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
     $post_content = trim($_POST['post_content']);
     $user_id = $_SESSION['user_id'];
 
-    // Prevent empty or duplicate submissions
     if (!empty($post_content)) {
-        $check_duplicate = "SELECT COUNT(*) FROM posts WHERE user_id = :user_id AND content = :content";
-        $stmt = $pdo->prepare($check_duplicate);
+        $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
+        $stmt = $pdo->prepare($insert_post);
         $stmt->execute([
             'user_id' => $user_id,
             'content' => $post_content
         ]);
-        $duplicate_count = $stmt->fetchColumn();
-
-        if ($duplicate_count == 0) { // Insert only if not a duplicate
-            $insert_post = "INSERT INTO posts (user_id, content, created_at) VALUES (:user_id, :content, NOW())";
-            $stmt = $pdo->prepare($insert_post);
-            $stmt->execute([
-                'user_id' => $user_id,
-                'content' => $post_content
-            ]);
-        }
     }
 }
 
-// Handle post deletion
-if (isset($_POST['delete_post'])) {
+// Handle new comment submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
+    $comment_content = trim($_POST['comment_content']);
     $post_id = $_POST['post_id'];
-    $delete_query = "DELETE FROM posts WHERE id = :post_id AND user_id = :user_id";
-    $stmt = $pdo->prepare($delete_query);
-    $stmt->execute([
-        'post_id' => $post_id,
-        'user_id' => $_SESSION['user_id']
-    ]);
-    header("Location: home.php");
-    exit();
+    $user_id = $_SESSION['user_id'];
+
+    if (!empty($comment_content)) {
+        $insert_comment = "INSERT INTO comments (post_id, user_id, content, created_at) VALUES (:post_id, :user_id, :content, NOW())";
+        $stmt = $pdo->prepare($insert_comment);
+        $stmt->execute([
+            'post_id' => $post_id,
+            'user_id' => $user_id,
+            'content' => $comment_content
+        ]);
+    }
 }
 
 // Fetch all posts
@@ -52,15 +45,25 @@ $sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_
                u.id AS user_id, u.email, u.profile_picture 
         FROM posts p 
         INNER JOIN users u ON p.user_id = u.id
-        GROUP BY p.id 
         ORDER BY p.created_at DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Check if $posts_result is null, if so, initialize it as an empty array
-if ($posts_result === false) {
-    $posts_result = [];
+// Fetch comments for each post
+$comments_query = "SELECT c.id AS comment_id, c.content AS comment_content, c.created_at AS comment_created_at, 
+                          u.email AS commenter_email, u.profile_picture AS commenter_picture, c.post_id
+                   FROM comments c
+                   INNER JOIN users u ON c.user_id = u.id
+                   ORDER BY c.created_at ASC";
+$comments_stmt = $pdo->prepare($comments_query);
+$comments_stmt->execute();
+$comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Group comments by post ID for easy retrieval
+$comments_by_post = [];
+foreach ($comments as $comment) {
+    $comments_by_post[$comment['post_id']][] = $comment;
 }
 ?>
 
@@ -98,7 +101,7 @@ if ($posts_result === false) {
       <p>No posts available.</p>
     <?php else: ?>
       <?php foreach ($posts_result as $post): ?>
-        <div class="post">
+        <div class="post" data-post-id="<?= $post['post_id'] ?>">
           <div class="post-header">
             <img src="<?= htmlspecialchars($post['profile_picture']) ?>" alt="User" class="post-avatar">
             <div class="post-info">
@@ -113,12 +116,25 @@ if ($posts_result === false) {
             <button class="share-btn">🔄</button>
           </div>
 
-          <!-- Comment Section (Initially Hidden) -->
+          <!-- Comment Section -->
           <div class="comment-section" style="display: none;">
-            <textarea class="comment-input" placeholder="Write a comment..."></textarea>
-            <button onclick="postComment(event)">Post Comment</button>
-            <div class="comments-display"></div>
-            <p class="comment-count">0 Comments</p>
+            <form method="POST" action="home.php">
+              <textarea name="comment_content" placeholder="Write a comment..." required></textarea>
+              <input type="hidden" name="post_id" value="<?= $post['post_id'] ?>">
+              <button type="submit" name="add_comment">Post Comment</button>
+            </form>
+            <div class="comments-display">
+              <?php if (isset($comments_by_post[$post['post_id']])): ?>
+                <?php foreach ($comments_by_post[$post['post_id']] as $comment): ?>
+                  <div class="comment">
+                    <img src="<?= htmlspecialchars($comment['commenter_picture']) ?>" alt="User" class="comment-avatar">
+                    <strong><?= htmlspecialchars($comment['commenter_email']) ?></strong>
+                    <p><?= htmlspecialchars($comment['comment_content']) ?></p>
+                    <span class="timestamp"><?= htmlspecialchars($comment['comment_created_at']) ?></span>
+                  </div>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </div>
           </div>
         </div>
       <?php endforeach; ?>

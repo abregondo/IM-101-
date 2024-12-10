@@ -1,13 +1,11 @@
-// JavaScript to handle likes and comments
-
 // Function to handle likes
 function likePost(button) {
   const likeCount = button.closest('.post').querySelector('.like-count');
-  let likes = parseInt(likeCount.innerText.split(' ')[0]);
+  let likes = parseInt(likeCount.innerText.split(' ')[0]) || 0;
   likes += 1;
-  likeCount.innerText = `${likes} Likes`; // Update the like count
-  button.disabled = true; // Disable the like button once liked
-  button.style.color = 'red'; // Optional: Change the color of the like button after it's clicked
+  likeCount.innerText = `${likes} Likes`;
+  button.disabled = true;
+  button.style.color = 'red';
 }
 
 // Function to toggle the comment section visibility
@@ -17,32 +15,40 @@ function toggleCommentSection(event) {
   commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
 }
 
-// Function to handle posting a comment
-function postComment(event) {
+// Function to handle posting a comment (AJAX update)
+async function postComment(event) {
   const postElement = event.target.closest('.post');
   const commentInput = postElement.querySelector('.comment-input');
   const commentsDisplay = postElement.querySelector('.comments-display');
-  const commentSection = postElement.querySelector('.comment-section');
+  const postId = postElement.dataset.postId;
 
   if (commentInput.value.trim()) {
-    // Create and append the new comment
-    const newComment = document.createElement('div');
-    newComment.textContent = commentInput.value;
-    commentsDisplay.appendChild(newComment);
+    const commentContent = commentInput.value;
 
-    // Update comment count
-    const commentCount = postElement.querySelector('.comment-count');
-    let comments = parseInt(commentCount.innerText.split(' ')[0]);
-    comments += 1;
-    commentCount.innerText = `${comments} Comments`;
+    // Send comment to the server
+    const response = await fetch('add_comment.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ post_id: postId, comment_content: commentContent })
+    });
 
-    // Clear input field
-    commentInput.value = '';
+    if (response.ok) {
+      const result = await response.json();
 
-    // Ensure comment section is displayed
-    commentSection.style.display = 'block';
+      // Update comments display
+      const newComment = document.createElement('div');
+      newComment.classList.add('comment');
+      newComment.innerHTML = `
+        <img src="${result.commenter_picture}" alt="User" class="comment-avatar">
+        <strong>${result.commenter_email}</strong>
+        <p>${result.comment_content}</p>
+        <span class="timestamp">${result.comment_created_at}</span>
+      `;
+      commentsDisplay.appendChild(newComment);
 
-    // Scroll to the new comment (ensure the container scrolls to the bottom)
-    commentsDisplay.scrollTop = commentsDisplay.scrollHeight;
+      commentInput.value = '';
+    } else {
+      alert('Failed to post comment. Please try again.');
+    }
   }
 }
