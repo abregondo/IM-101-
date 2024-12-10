@@ -21,6 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
             'content' => $post_content
         ]);
     }
+
+    // Redirect to avoid form resubmission
+    header('Location: home.php');
+    exit();
 }
 
 // Handle new comment submissions
@@ -38,6 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
             'content' => $comment_content
         ]);
     }
+
+    // Redirect to avoid form resubmission
+    header('Location: home.php');
+    exit();
 }
 
 // Fetch all posts
