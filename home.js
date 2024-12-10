@@ -1,11 +1,35 @@
 // Function to handle likes
-function likePost(button) {
-  const likeCount = button.closest('.post').querySelector('.like-count');
+async function likePost(button) {
+  const postElement = button.closest('.post');
+  const postId = postElement.dataset.postId;
+  const likeCount = postElement.querySelector('.like-count');
   let likes = parseInt(likeCount.innerText.split(' ')[0]) || 0;
-  likes += 1;
-  likeCount.innerText = `${likes} Likes`;
-  button.disabled = true;
-  button.style.color = 'red';
+
+  try {
+    // Send like action to the server
+    const response = await fetch('like_post.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ post_id: postId })
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      if (result.success) {
+        likes += 1; // Increment likes
+        likeCount.innerText = `${likes} Likes`; // Update the UI
+        button.disabled = true; // Disable button to prevent multiple likes
+        button.style.color = 'red'; // Indicate liked state
+      } else {
+        alert('Failed to like post. Please try again.');
+      }
+    } else {
+      alert('Server error. Please try again later.');
+    }
+  } catch (error) {
+    console.error('Error liking post:', error);
+    alert('Failed to connect to the server. Please try again.');
+  }
 }
 
 // Function to toggle the comment section visibility
