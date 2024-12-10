@@ -1,34 +1,35 @@
 // Function to handle likes
 async function likePost(button) {
   const postElement = button.closest('.post');
-  const postId = postElement.dataset.postId;
-  const likeCount = postElement.querySelector('.like-count');
-  let likes = parseInt(likeCount.innerText.split(' ')[0]) || 0;
+  const postId = postElement.dataset.postId; // Get the post ID from the data attribute
+  const likeCountElement = postElement.querySelector('.like-count');
+  let likeCount = parseInt(likeCountElement.innerText.split(' ')[0]) || 0;
+  
+  // Send an AJAX request to like_post.php
+  const response = await fetch('like_post.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ post_id: postId })
+  });
 
-  try {
-    // Send like action to the server
-    const response = await fetch('like_post.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ post_id: postId })
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      if (result.success) {
-        likes += 1; // Increment likes
-        likeCount.innerText = `${likes} Likes`; // Update the UI
-        button.disabled = true; // Disable button to prevent multiple likes
-        button.style.color = 'red'; // Indicate liked state
-      } else {
-        alert('Failed to like post. Please try again.');
-      }
-    } else {
-      alert('Server error. Please try again later.');
+  if (response.ok) {
+    const result = await response.json();
+    
+    if (result.action === 'liked') {
+      likeCount += 1; // Increase like count if post was liked
+      button.style.color = 'red'; // Change the color of the like button to indicate it was liked
+    } else if (result.action === 'unliked') {
+      likeCount -= 1; // Decrease like count if post was unliked
+      button.style.color = ''; // Reset the like button color if unliked
     }
-  } catch (error) {
-    console.error('Error liking post:', error);
-    alert('Failed to connect to the server. Please try again.');
+
+    // Update the like count on the page
+    likeCountElement.innerText = `${likeCount} Likes`;
+
+    // Disable the like button after it is clicked (optional)
+    button.disabled = true;
+  } else {
+    alert('Failed to like/unlike the post. Please try again.');
   }
 }
 

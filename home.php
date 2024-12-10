@@ -119,7 +119,8 @@ foreach ($comments as $comment) {
           </div>
           <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
           <div class="post-actions">
-            <button class="like-btn" onclick="likePost(this)">❤️</button>
+            <button class="like-btn" onclick="likePost(this)" data-post-id="<?= $post['post_id'] ?>">❤️</button>
+            <span class="like-count">0 Likes</span>
             <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
             <button class="share-btn">🔄</button>
           </div>
