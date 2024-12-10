@@ -99,12 +99,13 @@ foreach ($comments as $comment) {
           <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
           <div class="post-actions">
             <button class="like-btn" onclick="likePost(this)">❤️</button>
+            <span class="like-count">0 Likes</span> <!-- Like count placeholder -->
             <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
             <button class="share-btn">🔄</button>
           </div>
 
           <!-- Comment Section -->
-          <div class="comment-section" style="display: none;">
+          <div class="comment-section">
             <form onsubmit="postComment(event, <?= $post['post_id'] ?>)">
               <textarea class="comment-input" placeholder="Write a comment..." required></textarea>
               <button type="submit">Post Comment</button>
@@ -119,6 +120,8 @@ foreach ($comments as $comment) {
                     <span class="timestamp"><?= htmlspecialchars($comment['comment_created_at']) ?></span>
                   </div>
                 <?php endforeach; ?>
+              <?php else: ?>
+                <p>No comments yet. Be the first to comment!</p>
               <?php endif; ?>
             </div>
           </div>
