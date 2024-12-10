@@ -38,16 +38,16 @@ async function likePost(button) {
 function toggleCommentSection(event) {
   const postElement = event.target.closest('.post');
   const commentSection = postElement.querySelector('.comment-section');
+  // Toggle display of the comment section
   commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
 }
 
 // Function to handle posting a comment (AJAX update)
-async function postComment(event) {
+async function postComment(event, postId) {
   event.preventDefault(); // Prevent form submission from reloading the page
   const postElement = event.target.closest('.post');
   const commentInput = postElement.querySelector('.comment-input');
   const commentsDisplay = postElement.querySelector('.comments-display');
-  const postId = postElement.dataset.postId;
 
   if (commentInput.value.trim()) {
     const commentContent = commentInput.value;

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
     exit();
 }
 
-// Fetch all posts and their like counts
+// Fetch all posts along with the like count and whether the user has liked the post
 $sql = "SELECT 
             p.id AS post_id, 
             p.content AS post_content, 
@@ -35,12 +35,13 @@ $sql = "SELECT
             u.id AS user_id, 
             u.email, 
             u.profile_picture,
-            (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id) AS like_count
+            (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id) AS like_count,
+            (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.user_id = :user_id) AS user_liked
         FROM posts p 
         INNER JOIN users u ON p.user_id = u.id
         ORDER BY p.created_at DESC";
 $stmt = $pdo->prepare($sql);
-$stmt->execute();
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
 $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch comments for each post
@@ -104,7 +105,9 @@ foreach ($comments as $comment) {
           </div>
           <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
           <div class="post-actions">
-            <button class="like-btn" onclick="likePost(this)">❤️</button>
+            <button class="like-btn <?= $post['user_liked'] ? 'liked' : '' ?>" onclick="likePost(this)">
+                ❤️
+            </button>
             <span class="like-count"><?= htmlspecialchars($post['like_count']) ?> Likes</span>
             <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
             <button class="share-btn">🔄</button>
