@@ -26,9 +26,6 @@ async function likePost(button) {
 
       // Update the like count on the page
       likeCountElement.innerText = `${likeCount} Likes`;
-
-      // Disable the like button after it is clicked (optional)
-      button.disabled = false; // Ensure button remains usable for toggling
     } else {
       alert('Failed to like/unlike the post. Please try again.');
     }
@@ -37,11 +34,10 @@ async function likePost(button) {
   }
 }
 
-// Function to toggle the comment section visibility
-function toggleCommentSection(event) {
-  const postElement = event.target.closest('.post');
+// Function to show the comment section directly (always visible)
+function showCommentSection(postElement) {
   const commentSection = postElement.querySelector('.comment-section');
-  commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
+  commentSection.style.display = 'block'; // Ensure comments are visible
 }
 
 // Function to handle posting a comment (AJAX update)
