@@ -27,9 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
     exit();
 }
 
-// Fetch all posts
-$sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
-               u.id AS user_id, u.email, u.profile_picture 
+// Fetch all posts and their like counts
+$sql = "SELECT 
+            p.id AS post_id, 
+            p.content AS post_content, 
+            p.created_at AS post_created_at, 
+            u.id AS user_id, 
+            u.email, 
+            u.profile_picture,
+            (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id) AS like_count
         FROM posts p 
         INNER JOIN users u ON p.user_id = u.id
         ORDER BY p.created_at DESC";
@@ -99,7 +105,7 @@ foreach ($comments as $comment) {
           <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
           <div class="post-actions">
             <button class="like-btn" onclick="likePost(this)">❤️</button>
-            <span class="like-count">0 Likes</span> <!-- Like count placeholder -->
+            <span class="like-count"><?= htmlspecialchars($post['like_count']) ?> Likes</span>
             <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
             <button class="share-btn">🔄</button>
           </div>

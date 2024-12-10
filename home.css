@@ -131,12 +131,14 @@ header .header-right button {
   border-radius: 5px;
 }
 
+/* Like Button Styles */
 .like-btn {
-  color: red;
+  color: gray; /* Default color */
+  transition: color 0.3s ease;
 }
 
-.comment-btn {
-  color: blue;
+.like-btn.liked {
+  color: red; /* Highlight color when liked */
 }
 
 /* Comment Section */
