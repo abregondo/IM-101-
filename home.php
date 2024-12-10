@@ -27,27 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
     exit();
 }
 
-// Handle new comment submissions
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
-    $comment_content = trim($_POST['comment_content']);
-    $post_id = $_POST['post_id'];
-    $user_id = $_SESSION['user_id'];
-
-    if (!empty($comment_content)) {
-        $insert_comment = "INSERT INTO comments (post_id, user_id, content, created_at) VALUES (:post_id, :user_id, :content, NOW())";
-        $stmt = $pdo->prepare($insert_comment);
-        $stmt->execute([
-            'post_id' => $post_id,
-            'user_id' => $user_id,
-            'content' => $comment_content
-        ]);
-    }
-
-    // Redirect to avoid form resubmission
-    header('Location: home.php');
-    exit();
-}
-
 // Fetch all posts
 $sql = "SELECT p.id AS post_id, p.content AS post_content, p.created_at AS post_created_at, 
                u.id AS user_id, u.email, u.profile_picture 
@@ -119,18 +98,16 @@ foreach ($comments as $comment) {
           </div>
           <p class="post-content"><?= htmlspecialchars($post['post_content']) ?></p>
           <div class="post-actions">
-            <button class="like-btn" onclick="likePost(this)" data-post-id="<?= $post['post_id'] ?>">❤️</button>
-            <span class="like-count">0 Likes</span>
+            <button class="like-btn" onclick="likePost(this)">❤️</button>
             <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
             <button class="share-btn">🔄</button>
           </div>
 
           <!-- Comment Section -->
           <div class="comment-section" style="display: none;">
-            <form method="POST" action="home.php">
-              <textarea name="comment_content" placeholder="Write a comment..." required></textarea>
-              <input type="hidden" name="post_id" value="<?= $post['post_id'] ?>">
-              <button type="submit" name="add_comment">Post Comment</button>
+            <form onsubmit="postComment(event, <?= $post['post_id'] ?>)">
+              <textarea class="comment-input" placeholder="Write a comment..." required></textarea>
+              <button type="submit">Post Comment</button>
             </form>
             <div class="comments-display">
               <?php if (isset($comments_by_post[$post['post_id']])): ?>
