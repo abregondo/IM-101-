@@ -55,9 +55,7 @@ $user_posts = $posts_stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="header-left">
             <a href="home.php" class="back-link">&larr; Back to Home</a>
         </div>
-        <div class="header-right">
-            <h1><?= htmlspecialchars($user['email']) ?>'s Timeline</h1>
-        </div>
+       
     </header>
 
     <!-- Profile Section -->
