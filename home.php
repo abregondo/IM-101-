@@ -97,11 +97,11 @@ foreach ($comments as $comment) {
       <?php foreach ($posts_result as $post): ?>
         <div class="post" data-post-id="<?= $post['post_id'] ?>">
           <div class="post-header">
-            <a href="timeline.php?user_id=<?= $post['user_id'] ?>">
+            <a href="timeline.php?user_id=<?= $post['user_id'] ?>" class="unstyled-link">
               <img src="<?= htmlspecialchars($post['profile_picture']) ?>" alt="User" class="post-avatar">
             </a>
             <div class="post-info">
-              <a href="timeline.php?user_id=<?= $post['user_id'] ?>">
+              <a href="timeline.php?user_id=<?= $post['user_id'] ?>" class="unstyled-link">
                 <strong><?= htmlspecialchars($post['email']) ?></strong>
               </a>
               <p class="timestamp"><?= htmlspecialchars($post['post_created_at']) ?></p>
