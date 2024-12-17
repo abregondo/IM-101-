@@ -1,0 +1,216 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+header .header-left h1 {
+  margin: 0;
+}
+
+header .header-right a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+header .header-right button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Create Post Section */
+.create-post-section {
+  position: fixed;
+  top: 20px; /* Adjust the position from the top of the page */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%; /* You can adjust the width as needed */
+  background-color: white;
+  padding: 10px;
+  z-index: 1000; /* Ensures it's above other content */
+  border-radius: 8px;
+}
+
+.create-post-section form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-post-section textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  height: 100px;
+}
+
+.create-post-section button {
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.create-post-section button:hover {
+  background-color: #444;
+}
+
+/* Feed Section */
+.feed {
+  margin-top: 120px; /* Give enough space for the fixed input */
+  margin: 20px;
+}
+
+.post {
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.post-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.timestamp {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.post-content {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+/* Post Actions (Like, Comment, Share) */
+.post-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.like-btn,
+.comment-btn,
+.share-btn {
+  font-size: 1.5rem;
+  padding: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.like-btn:hover,
+.comment-btn:hover,
+.share-btn:hover {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+}
+
+/* Like Button Styles */
+.like-btn {
+  color: gray; /* Default color */
+  transition: color 0.3s ease;
+}
+
+.like-btn.liked {
+  color: red; /* Highlight color when liked */
+}
+
+/* Comment Section */
+.comment-section {
+  margin-top: 10px;
+  display: none;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.comment-section button {
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment-section button:hover {
+  background-color: #444;
+}
+
+.comments-display {
+  margin-top: 10px;
+}
+
+.comments-display div {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.comment-count {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Footer Section */
+footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+}
+
+footer button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+footer button:hover {
+  background-color: #444;
+}
