@@ -33,7 +33,7 @@ $sql = "SELECT
             p.content AS post_content, 
             p.created_at AS post_created_at, 
             u.id AS user_id, 
-            u.email, 
+            u.username, 
             u.profile_picture,
             (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id) AS like_count,
             (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.user_id = :user_id) AS user_liked
