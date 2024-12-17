@@ -1,0 +1,135 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #444;
+    font-size: 2rem;
+}
+
+/* Profile Picture Section */
+.profile-picture {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007BFF;
+}
+
+/* Form Container */
+form {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Input and Buttons */
+label {
+    font-size: 1rem;
+    color: #555;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+}
+
+button {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Remove Profile Button */
+button[name="remove_profile_picture"] {
+    background-color: #e74c3c;
+}
+
+button[name="remove_profile_picture"]:hover {
+    background-color: #c0392b;
+}
+
+/* Success/Error Messages */
+p {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+p[style="color: green;"] {
+    color: #28a745 !important;
+}
+
+p[style="color: red;"] {
+    color: #e74c3c !important;
+}
+
+/* Link Back to Timeline */
+a {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+    form {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+}
