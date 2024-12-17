@@ -9,9 +9,21 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+$default_profile_picture = 'uploads/default_profile.png'; // Default profile picture path
 
 // Handle form submission for updating the profile picture
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['remove_profile_picture'])) {
+        // Remove profile picture (set to default)
+        $update_query = "UPDATE users SET profile_picture = :profile_picture WHERE id = :user_id";
+        $stmt = $pdo->prepare($update_query);
+        $stmt->execute(['profile_picture' => $default_profile_picture, 'user_id' => $user_id]);
+
+        $_SESSION['success_message'] = "Profile picture removed successfully!";
+        header('Location: edit_profile.php');
+        exit();
+    }
+
     if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
         $file_tmp = $_FILES['profile_picture']['tmp_name'];
         $file_name = basename($_FILES['profile_picture']['name']);
@@ -32,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute(['profile_picture' => $file_destination, 'user_id' => $user_id]);
 
                 $_SESSION['success_message'] = "Profile picture updated successfully!";
-                header('Location: timeline.php?user_id=' . $user_id);
+                header('Location: edit_profile.php');
                 exit();
             } else {
                 $error_message = "Failed to upload the file. Please try again.";
@@ -50,7 +62,6 @@ $user_query = "SELECT profile_picture FROM users WHERE id = :user_id";
 $stmt = $pdo->prepare($user_query);
 $stmt->execute(['user_id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +94,11 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         <label for="profile_picture">Choose a new profile picture:</label><br>
         <input type="file" name="profile_picture" id="profile_picture" accept="image/*" required><br><br>
         <button type="submit">Save Changes</button>
+    </form>
+
+    <!-- Remove Profile Picture -->
+    <form method="POST" style="margin-top: 20px;">
+        <button type="submit" name="remove_profile_picture" style="background-color: red; color: white; border: none; padding: 10px;">Remove Profile Picture</button>
     </form>
 
     <br>
