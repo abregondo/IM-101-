@@ -55,13 +55,17 @@ $user_posts = $posts_stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="header-left">
             <a href="home.php" class="back-link">&larr; Back to Home</a>
         </div>
-       
     </header>
 
     <!-- Profile Section -->
     <div class="profile-section">
         <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture" class="profile-avatar">
         <h2><?= htmlspecialchars($user['email']) ?></h2>
+
+        <!-- Edit Profile (Only if the logged-in user is viewing their own timeline) -->
+        <?php if ($_SESSION['user_id'] == $user_id): ?>
+            <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
+        <?php endif; ?>
     </div>
 
     <!-- User Posts Section -->
