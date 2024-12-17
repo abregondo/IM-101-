@@ -148,7 +148,7 @@ foreach ($comments as $comment) {
     <a href="home.php"><button>🏠</button></a>
     <a href="search.php"><button>🔍</button></a>
     <a href="create_post.php"><button id="createPostBtn">✍️</button></a>
-    <a href="profile.php"><button>👤</button></a>
+    <a href="timeline.php"><button>👤</button></a>
   </footer>
 
   <script src="home.js"></script>
