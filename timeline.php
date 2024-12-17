@@ -8,6 +8,13 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Handle sign out
+if (isset($_POST['sign_out'])) {
+    session_destroy();
+    header('Location: sign_in.php');
+    exit();
+}
+
 // Check if user_id is provided in the URL
 if (!isset($_GET['user_id'])) {
     echo "User ID is not provided.";
@@ -54,6 +61,11 @@ $user_posts = $posts_stmt->fetchAll(PDO::FETCH_ASSOC);
     <header>
         <div class="header-left">
             <a href="home.php" class="back-link">&larr; Back to Home</a>
+        </div>
+        <div class="header-right">
+            <form method="POST" action="">
+                <button type="submit" name="sign_out" class="sign-out-button">Sign Out</button>
+            </form>
         </div>
     </header>
 
