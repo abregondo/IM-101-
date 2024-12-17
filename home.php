@@ -102,7 +102,7 @@ foreach ($comments as $comment) {
             </a>
             <div class="post-info">
               <a href="timeline.php?user_id=<?= $post['user_id'] ?>" class="unstyled-link">
-                <strong><?= htmlspecialchars($post['email']) ?></strong>
+                <strong><?= htmlspecialchars($post['username']) ?></strong>
               </a>
               <p class="timestamp"><?= htmlspecialchars($post['post_created_at']) ?></p>
             </div>
