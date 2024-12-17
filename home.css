@@ -36,7 +36,15 @@ header .header-right button {
 
 /* Create Post Section */
 .create-post-section {
-  margin: 20px;
+  position: fixed;
+  top: 20px; /* Adjust the position from the top of the page */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%; /* You can adjust the width as needed */
+  background-color: white;
+  padding: 10px;
+  z-index: 1000; /* Ensures it's above other content */
+  border-radius: 8px;
 }
 
 .create-post-section form {
@@ -69,6 +77,7 @@ header .header-right button {
 
 /* Feed Section */
 .feed {
+  margin-top: 120px; /* Give enough space for the fixed input */
   margin: 20px;
 }
 
@@ -154,6 +163,18 @@ header .header-right button {
   border-radius: 5px;
   font-size: 1rem;
   margin-bottom: 10px;
+}
+
+.comment-section form {
+  position: fixed;
+  bottom: 20px; /* Adjust the position from the bottom of the page */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%; /* Adjust width as needed */
+  background-color: white;
+  padding: 10px;
+  z-index: 999;
+  border-radius: 8px;
 }
 
 .comment-section button {
