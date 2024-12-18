@@ -76,7 +76,7 @@ foreach ($comments as $comment) {
       <h1 class="app-name">Chattrix</h1>
     </div>
     <div class="header-right">
-      <a href="notification.php"><button id="notifBtn">🔔</button></a>
+      <a href="notifications.php"><button id="notifBtn">🔔</button></a>
       <a href="messages.php"><button id="msgBtn">💬</button></a>
     </div>
   </header>
