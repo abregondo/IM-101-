@@ -60,8 +60,8 @@ header .header-right button {
   border-radius: 5px;
   font-size: 1rem;
   height: 100px;
-  resize: none; /* Disable resizing */
-  overflow: hidden; /* Prevent scrollbars */
+  resize: none; 
+  overflow: hidden; 
 }
 
 .create-post-section button {
@@ -79,7 +79,7 @@ header .header-right button {
 
 /* Feed Section */
 .feed {
-  margin-top: 120px; /* Give enough space for the fixed input */
+  margin-top: 120px; 
   margin: 20px;
 }
 
@@ -144,12 +144,12 @@ header .header-right button {
 
 /* Like Button Styles */
 .like-btn {
-  color: gray; /* Default color */
+  color: gray; 
   transition: color 0.3s ease;
 }
 
 .like-btn.liked {
-  color: red; /* Highlight color when liked */
+  color: red; 
 }
 
 /* Comment Section */
@@ -194,14 +194,14 @@ header .header-right button {
 }
 
 .comment-avatar {
-  width: 30px; /* Adjust as needed for smaller size in comments */
-  height: 30px; /* Same as width to maintain circular shape */
-  border-radius: 50%; /* Ensures the image is circular */
-  object-fit: cover; /* Fits the image properly within the circle */
-  border: 1px solid #ccc; /* Optional border for better aesthetics */
-  margin-right: 10px; /* Adds space between the avatar and the text */
-  display: inline-block; /* Ensures proper alignment with the text */
-  vertical-align: middle; /* Aligns with the text in the comment */
+  width: 30px; 
+  height: 30px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  border: 1px solid #ccc; 
+  margin-right: 10px; 
+  display: inline-block; 
+  vertical-align: middle; 
 }
 
 .comment-count {
