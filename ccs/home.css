@@ -36,18 +36,16 @@ header .header-right button {
 
 /* Create Post Section */
 .create-post-section {
-  position: fixed;
-  top: 20px; /* Adjust the position from the top of the page */
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative; /* Changed from fixed to relative */
+  margin: 20px auto; /* Centered the section */
   width: 90%; /* Adjust width as needed */
   max-width: 600px; /* Limit maximum width */
   background-color: white;
   padding: 15px;
-  z-index: 1000; /* Ensures it's above other content */
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 
 .create-post-section form {
   display: flex;
@@ -61,8 +59,8 @@ header .header-right button {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-  height: 120px;
-  resize: none; /* Prevent resizing */
+  height: 100px;
+  resize: none; /* Disable resizing */
   overflow: hidden; /* Prevent scrollbars */
 }
 
@@ -81,7 +79,7 @@ header .header-right button {
 
 /* Feed Section */
 .feed {
-  margin-top: 150px; /* Leave space for the fixed Create Post section */
+  margin-top: 120px; /* Give enough space for the fixed input */
   margin: 20px;
 }
 
