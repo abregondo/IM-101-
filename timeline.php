@@ -47,17 +47,6 @@ $posts_stmt = $pdo->prepare($posts_query);
 $posts_stmt->execute(['user_id' => $user_id]);
 $user_posts = $posts_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch the count of followers and following
-$followers_query = "SELECT COUNT(*) AS follower_count FROM followers WHERE following_id = :user_id";
-$followers_stmt = $pdo->prepare($followers_query);
-$followers_stmt->execute(['user_id' => $user_id]);
-$followers_count = $followers_stmt->fetch(PDO::FETCH_ASSOC)['follower_count'];
-
-$following_query = "SELECT COUNT(*) AS following_count FROM followers WHERE follower_id = :user_id";
-$following_stmt = $pdo->prepare($following_query);
-$following_stmt->execute(['user_id' => $user_id]);
-$following_count = $following_stmt->fetch(PDO::FETCH_ASSOC)['following_count'];
-
 // Handle follow/unfollow action
 if (isset($_POST['follow'])) {
     // Check if the logged-in user is following the current user
@@ -88,6 +77,18 @@ $follow_query = "SELECT * FROM followers WHERE follower_id = :logged_in_user_id 
 $follow_stmt = $pdo->prepare($follow_query);
 $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
 $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
+
+// Fetch followers and following count
+$followers_query = "SELECT COUNT(*) AS followers_count FROM followers WHERE following_id = :user_id";
+$followers_stmt = $pdo->prepare($followers_query);
+$followers_stmt->execute(['user_id' => $user_id]);
+$followers_count = $followers_stmt->fetch(PDO::FETCH_ASSOC)['followers_count'];
+
+$following_query = "SELECT COUNT(*) AS following_count FROM followers WHERE follower_id = :user_id";
+$following_stmt = $pdo->prepare($following_query);
+$following_stmt->execute(['user_id' => $user_id]);
+$following_count = $following_stmt->fetch(PDO::FETCH_ASSOC)['following_count'];
+
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +97,7 @@ $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($user['email']) ?>'s Timeline</title>
-    <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="css/timeline.css"> <!-- Link to your updated CSS file -->
 </head>
 <body>
     <!-- Header Section -->
@@ -116,23 +117,18 @@ $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
         <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture" class="profile-avatar">
         <h2><?= htmlspecialchars($user['email']) ?></h2>
 
-        <!-- Followers and Following count -->
-        <div class="followers-following">
-            <span>Followers: <?= $followers_count ?></span> |
-            <span>Following: <?= $following_count ?></span>
+        <!-- Followers and Following Count -->
+        <div class="follow-stats">
+            <p><strong>Followers:</strong> <?= $followers_count ?></p>
+            <p><strong>Following:</strong> <?= $following_count ?></p>
         </div>
 
-        <!-- Edit Profile (Only if the logged-in user is viewing their own timeline) -->
-        <?php if ($_SESSION['user_id'] == $user_id): ?>
-            <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
-        <?php else: ?>
-            <!-- Follow/Unfollow Button -->
-            <form method="POST" action="">
-                <button type="submit" name="follow" class="follow-button">
-                    <?= $is_following ? 'Unfollow' : 'Follow' ?>
-                </button>
-            </form>
-        <?php endif; ?>
+        <!-- Follow/Unfollow Button -->
+        <form method="POST" action="">
+            <button type="submit" name="follow" class="follow-button">
+                <?= $is_following ? 'Unfollow' : 'Follow' ?>
+            </button>
+        </form>
     </div>
 
     <!-- User Posts Section -->
@@ -151,5 +147,10 @@ $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Your Website | <a href="#">Privacy</a> | <a href="#">Terms</a></p>
+    </footer>
 </body>
 </html>
