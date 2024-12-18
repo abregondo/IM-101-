@@ -65,6 +65,17 @@ if (isset($_POST['follow'])) {
         $follow_query = "INSERT INTO followers (follower_id, following_id) VALUES (:logged_in_user_id, :user_id)";
         $follow_stmt = $pdo->prepare($follow_query);
         $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
+
+        // Insert notification for the followed user
+        $notification_message = "User " . htmlspecialchars($_SESSION['user_email']) . " has followed you.";
+        $notification_query = "INSERT INTO notifications (user_id, sender_id, type, message) 
+                               VALUES (:user_id, :sender_id, 'follow', :message)";
+        $notification_stmt = $pdo->prepare($notification_query);
+        $notification_stmt->execute([
+            'user_id' => $user_id, // The user being followed
+            'sender_id' => $_SESSION['user_id'], // The user who clicked follow
+            'message' => $notification_message
+        ]);
     }
 
     // Reload the page to reflect the change

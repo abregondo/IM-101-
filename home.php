@@ -39,7 +39,7 @@ $sql = "SELECT
             (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.user_id = :user_id) AS user_liked
         FROM posts p 
         INNER JOIN users u ON p.user_id = u.id
-        ORDER BY p.created_at DESC";
+        ORDER BY p.created_at DESC;";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['user_id' => $_SESSION['user_id']]);
 $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);

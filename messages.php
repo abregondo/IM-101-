@@ -30,7 +30,7 @@ $conversations = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chattrix</title>
     <link rel="stylesheet" href="ccs/messages.css">
-</head>
+</head> 
 <body>
     <h1>Your Conversations</h1>
     <div class="conversations">
