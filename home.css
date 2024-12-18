@@ -37,13 +37,13 @@ header .header-right button {
 /* Create Post Section */
 .create-post-section {
   position: fixed;
-  top: 20px; /* Adjust the position from the top of the page */
+  top: 20px; 
   left: 50%;
   transform: translateX(-50%);
-  width: 90%; /* You can adjust the width as needed */
+  width: 90%; 
   background-color: white;
   padding: 10px;
-  z-index: 1000; /* Ensures it's above other content */
+  z-index: 1000; 
   border-radius: 8px;
 }
 
@@ -80,7 +80,7 @@ header .header-right button {
 
 /* Feed Section */
 .feed {
-  margin-top: 120px; /* Give enough space for the fixed input */
+  margin-top: 120px;
   margin: 20px;
 }
 
@@ -145,12 +145,12 @@ header .header-right button {
 
 /* Like Button Styles */
 .like-btn {
-  color: gray; /* Default color */
+  color: gray;
   transition: color 0.3s ease;
 }
 
 .like-btn.liked {
-  color: red; /* Highlight color when liked */
+  color: red; 
 }
 
 /* Comment Section */
