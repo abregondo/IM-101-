@@ -67,17 +67,19 @@ if (isset($_POST['follow'])) {
         $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
 
         // Insert notification about following
-        $notification_message = $_SESSION['user_id'] . " followed you."; // Customize the notification message as needed
+        $follower_id = $_SESSION['user_id']; // ID of the follower
+        $notification_message = "You have a new follower!";
         $notification_type = 'follow'; // Set the notification type
 
-        // Insert the notification into the database (including the 'type' column)
-        $notification_query = "INSERT INTO notifications (user_id, message, type) 
-                               VALUES (:user_id, :message, :type)";
+        // Insert the notification into the database (including the 'type' column and follower_id)
+        $notification_query = "INSERT INTO notifications (user_id, message, type, follower_id) 
+                               VALUES (:user_id, :message, :type, :follower_id)";
         $notification_stmt = $pdo->prepare($notification_query);
         $notification_stmt->execute([
             'user_id' => $user_id, // The user being followed
             'message' => $notification_message,
-            'type' => $notification_type // Notification type
+            'type' => $notification_type, // Notification type
+            'follower_id' => $follower_id // Store follower's ID
         ]);
     }
 
@@ -91,6 +93,32 @@ $follow_query = "SELECT * FROM followers WHERE follower_id = :logged_in_user_id 
 $follow_stmt = $pdo->prepare($follow_query);
 $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
 $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
+
+// Fetch notifications for the user
+$notifications_query = "SELECT n.id, n.message, n.created_at, u.email AS follower_email 
+                        FROM notifications n 
+                        JOIN users u ON u.id = n.follower_id
+                        WHERE n.user_id = :user_id ORDER BY n.created_at DESC";
+$notifications_stmt = $pdo->prepare($notifications_query);
+$notifications_stmt->execute(['user_id' => $_SESSION['user_id']]);
+$notifications = $notifications_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Handle follow back action
+if (isset($_POST['follow_back'])) {
+    $follower_id = $_POST['follower_id'];
+
+    // Insert into followers table to follow back
+    $follow_query = "INSERT INTO followers (follower_id, following_id) VALUES (:follower_id, :following_id)";
+    $follow_stmt = $pdo->prepare($follow_query);
+    $follow_stmt->execute(['follower_id' => $follower_id, 'following_id' => $_SESSION['user_id']]);
+
+    // Optionally, insert a follow back notification if needed
+    // You can choose to insert another notification here if you like
+
+    // Reload the page to reflect the follow back
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +127,7 @@ $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($user['email']) ?>'s Timeline</title>
-    <link rel="stylesheet" href="ccs/timeline.css">
+    <link rel="stylesheet" href="css/timeline.css">
 </head>
 <body>
     <!-- Header Section -->
@@ -129,6 +157,28 @@ $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
                     <?= $is_following ? 'Unfollow' : 'Follow' ?>
                 </button>
             </form>
+        <?php endif; ?>
+    </div>
+
+    <!-- Notifications Section -->
+    <div class="notifications">
+        <h2>Notifications</h2>
+        <?php if (empty($notifications)): ?>
+            <p>No new notifications.</p>
+        <?php else: ?>
+            <?php foreach ($notifications as $notification): ?>
+                <div class="notification">
+                    <p><?= htmlspecialchars($notification['message']) ?></p>
+                    <p><strong><?= htmlspecialchars($notification['follower_email']) ?></strong> followed you!</p>
+                    <span class="timestamp"><?= htmlspecialchars($notification['created_at']) ?></span>
+                    <?php if ($_SESSION['user_id'] == $user_id): ?>
+                        <form method="POST" action="">
+                            <input type="hidden" name="follower_id" value="<?= htmlspecialchars($notification['follower_email']) ?>">
+                            <button type="submit" name="follow_back" class="follow-back-button">Follow Back</button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
         <?php endif; ?>
     </div>
 
