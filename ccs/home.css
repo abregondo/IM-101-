@@ -36,16 +36,15 @@ header .header-right button {
 
 /* Create Post Section */
 .create-post-section {
-  position: relative; 
-  margin: 20px auto; 
-  width: 90%; 
-  max-width: 1000px;
+  position: relative;
+  margin: 20px auto;
+  width: 90%; /* Matches the feed width */
+  max-width: 800px; /* Adjust as needed */
   background-color: white;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 
 .create-post-section form {
   display: flex;
@@ -53,7 +52,7 @@ header .header-right button {
 }
 
 .create-post-section textarea {
-  width: 100%;
+  width: 100%; /* Matches the width of each post */
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -79,8 +78,9 @@ header .header-right button {
 
 /* Feed Section */
 .feed {
-  margin-top: 120px; /* Give enough space for the fixed input */
-  margin: 20px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 800px; /* Matches the create-post-section */
 }
 
 .post {
