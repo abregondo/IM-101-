@@ -37,13 +37,13 @@ header .header-right button {
 /* Create Post Section */
 .create-post-section {
   position: fixed;
-  top: 20px; 
+  top: 20px; /* Adjust the position from the top of the page */
   left: 50%;
   transform: translateX(-50%);
-  width: 90%; 
+  width: 90%; /* You can adjust the width as needed */
   background-color: white;
   padding: 10px;
-  z-index: 1000; 
+  z-index: 1000; /* Ensures it's above other content */
   border-radius: 8px;
 }
 
@@ -60,10 +60,9 @@ header .header-right button {
   border-radius: 5px;
   font-size: 1rem;
   height: 100px;
-  resize: none;
-  overflow: hidden;
+  resize: none; /* Disable resizing */
+  overflow: hidden; /* Prevent scrollbars */
 }
-
 
 .create-post-section button {
   padding: 10px;
@@ -80,7 +79,7 @@ header .header-right button {
 
 /* Feed Section */
 .feed {
-  margin-top: 120px;
+  margin-top: 120px; /* Give enough space for the fixed input */
   margin: 20px;
 }
 
@@ -145,12 +144,12 @@ header .header-right button {
 
 /* Like Button Styles */
 .like-btn {
-  color: gray;
+  color: gray; /* Default color */
   transition: color 0.3s ease;
 }
 
 .like-btn.liked {
-  color: red; 
+  color: red; /* Highlight color when liked */
 }
 
 /* Comment Section */
