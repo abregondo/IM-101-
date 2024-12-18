@@ -33,7 +33,7 @@ if ($conversation_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
-    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="ccs/chat.css">
 </head>
 <body>
     <div class="chat-window">

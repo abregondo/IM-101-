@@ -70,7 +70,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
-    <link rel="stylesheet" href="edit_profile.css">
+    <link rel="stylesheet" href="ccs/edit_profile.css">
 </head>
 <body>
     <h2>Edit Profile</h2>

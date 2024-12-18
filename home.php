@@ -67,7 +67,7 @@ foreach ($comments as $comment) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chattrix</title>
-  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="ccs/home.css">
 </head>
 <body>
   <!-- Header Section -->

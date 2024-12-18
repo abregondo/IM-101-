@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Sign In</title>
     <style>
-        /* General body styling */
         body {
             background-color: #f4f4f4;
             font-family: 'Arial', sans-serif;
@@ -152,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 
-<form action="sign_in.php" method="POST">
+<form action="ccs/sign_in.php" method="POST">
     <h2>Sign In</h2>
     <?php if (isset($error)) echo "<p>$error</p>"; ?>
     
