@@ -114,7 +114,7 @@ foreach ($comments as $comment) {
             </button>
             <span class="like-count"><?= htmlspecialchars($post['like_count']) ?></span>
             <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
-            <button class="share-btn">🔄</button>
+            <button class="share-btn" onclick="sharePost(<?= $post['post_id'] ?>, '<?= htmlspecialchars($post['post_content'], ENT_QUOTES) ?>')">🔄</button>
           </div>
 
           <!-- Comment Section -->
@@ -151,6 +151,36 @@ foreach ($comments as $comment) {
     <a href="timeline.php?user_id=<?= $_SESSION['user_id'] ?>"><button>👤</button></a>
   </footer>
 
-  <script src="home.js"></script>
+  <script>
+    function sharePost(postId, postContent) {
+        const baseUrl = window.location.origin; // Get the base URL of the site
+        const postUrl = `${baseUrl}/view_post.php?post_id=${postId}`; // Generate the full post URL
+
+        // Check if the browser supports the Web Share API
+        if (navigator.share) {
+            navigator
+                .share({
+                    title: "Check out this post!",
+                    text: postContent,
+                    url: postUrl,
+                })
+                .then(() => alert("Post shared successfully!"))
+                .catch((error) => console.error("Error sharing post:", error));
+        } else {
+            // Fallback for unsupported browsers: Copy link to clipboard
+            copyToClipboard(postUrl);
+            alert("Post link copied to clipboard!");
+        }
+    }
+
+    function copyToClipboard(text) {
+        const tempInput = document.createElement("input");
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+    }
+  </script>
 </body>
 </html>
