@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('db.php'); // Include the database connection
+include('db.php'); 
 
 // Ensure user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -134,7 +134,6 @@ foreach ($comments as $comment) {
                   </div>
                 <?php endforeach; ?>
               <?php else: ?>
-                <p>No comments yet. Be the first to comment!</p>
               <?php endif; ?>
             </div>
           </div>
