@@ -16,10 +16,11 @@ async function likePost(button) {
     if (response.ok) {
       const result = await response.json();
 
-      if (result.action === 'liked') {
+      // Handle the like/unlike action based on the response
+      if (result.user_liked) {
         likeCount += 1; // Increase like count if post was liked
         button.classList.add('liked'); // Add 'liked' class for styling
-      } else if (result.action === 'unliked') {
+      } else {
         likeCount -= 1; // Decrease like count if post was unliked
         button.classList.remove('liked'); // Remove 'liked' class
       }

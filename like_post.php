@@ -36,7 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
 
             // Return success response for unliking
-            echo json_encode(['action' => 'unliked']);
+            echo json_encode([
+                'action' => 'unliked',
+                'user_liked' => false
+            ]);
         } else {
             // If not liked, add a like (insert into likes table)
             $insert_like = "INSERT INTO likes (post_id, user_id) VALUES (:post_id, :user_id)";
@@ -44,7 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
 
             // Return success response for liking
-            echo json_encode(['action' => 'liked']);
+            echo json_encode([
+                'action' => 'liked',
+                'user_liked' => true
+            ]);
         }
     } catch (PDOException $e) {
         // Handle any database errors
