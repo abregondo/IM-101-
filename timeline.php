@@ -47,6 +47,17 @@ $posts_stmt = $pdo->prepare($posts_query);
 $posts_stmt->execute(['user_id' => $user_id]);
 $user_posts = $posts_stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Fetch the count of followers and following
+$followers_query = "SELECT COUNT(*) AS follower_count FROM followers WHERE following_id = :user_id";
+$followers_stmt = $pdo->prepare($followers_query);
+$followers_stmt->execute(['user_id' => $user_id]);
+$followers_count = $followers_stmt->fetch(PDO::FETCH_ASSOC)['follower_count'];
+
+$following_query = "SELECT COUNT(*) AS following_count FROM followers WHERE follower_id = :user_id";
+$following_stmt = $pdo->prepare($following_query);
+$following_stmt->execute(['user_id' => $user_id]);
+$following_count = $following_stmt->fetch(PDO::FETCH_ASSOC)['following_count'];
+
 // Handle follow/unfollow action
 if (isset($_POST['follow'])) {
     // Check if the logged-in user is following the current user
@@ -85,7 +96,7 @@ $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($user['email']) ?>'s Timeline</title>
-    <link rel="stylesheet" href="ccs/timeline.css">
+    <link rel="stylesheet" href="css/timeline.css">
 </head>
 <body>
     <!-- Header Section -->
@@ -104,6 +115,12 @@ $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
     <div class="profile-section">
         <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture" class="profile-avatar">
         <h2><?= htmlspecialchars($user['email']) ?></h2>
+
+        <!-- Followers and Following count -->
+        <div class="followers-following">
+            <span>Followers: <?= $followers_count ?></span> |
+            <span>Following: <?= $following_count ?></span>
+        </div>
 
         <!-- Edit Profile (Only if the logged-in user is viewing their own timeline) -->
         <?php if ($_SESSION['user_id'] == $user_id): ?>
