@@ -112,7 +112,7 @@ foreach ($comments as $comment) {
             <button class="like-btn <?= $post['user_liked'] ? 'liked' : '' ?>" onclick="likePost(this)">
                 ❤️
             </button>
-            <span class="like-count"><?= htmlspecialchars($post['like_count']) ?> Likes</span>
+            <span class="like-count"><?= htmlspecialchars($post['like_count']) ?></span>
             <button class="comment-btn" onclick="toggleCommentSection(event)">💬</button>
             <button class="share-btn">🔄</button>
           </div>
