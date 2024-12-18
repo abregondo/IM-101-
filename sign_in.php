@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id']; // Set user session
-        header('Location: home.php'); // Redirect to home page
+        $_SESSION['user_id'] = $user['id']; 
+        header('Location: home.php'); 
         exit();
     } else {
         $error = "Invalid email or password";
