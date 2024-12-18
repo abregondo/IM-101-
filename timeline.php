@@ -65,13 +65,6 @@ if (isset($_POST['follow'])) {
         $follow_query = "INSERT INTO followers (follower_id, following_id) VALUES (:logged_in_user_id, :user_id)";
         $follow_stmt = $pdo->prepare($follow_query);
         $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
-
-        // Add notification
-        $notification_message = $_SESSION['user_id'] . " followed you!";
-        $notification_query = "INSERT INTO notifications (user_id, message, follower_id) 
-                               VALUES (:user_id, :message, :follower_id)";
-        $notification_stmt = $pdo->prepare($notification_query);
-        $notification_stmt->execute(['user_id' => $user_id, 'message' => $notification_message, 'follower_id' => $_SESSION['user_id']]);
     }
 
     // Reload the page to reflect the change
@@ -84,15 +77,6 @@ $follow_query = "SELECT * FROM followers WHERE follower_id = :logged_in_user_id 
 $follow_stmt = $pdo->prepare($follow_query);
 $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
 $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
-
-// Fetch notifications for the logged-in user
-$notifications_query = "SELECT n.id, n.message, n.created_at, u.email AS follower_email 
-                        FROM notifications n 
-                        JOIN users u ON u.id = n.follower_id
-                        WHERE n.user_id = :user_id ORDER BY n.created_at DESC";
-$notifications_stmt = $pdo->prepare($notifications_query);
-$notifications_stmt->execute(['user_id' => $_SESSION['user_id']]);
-$notifications = $notifications_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -131,24 +115,6 @@ $notifications = $notifications_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?= $is_following ? 'Unfollow' : 'Follow' ?>
                 </button>
             </form>
-        <?php endif; ?>
-    </div>
-
-    <!-- Notifications Section -->
-    <div class="notifications">
-        <h1>Notifications</h1>
-        <?php if (empty($notifications)): ?>
-            <p>No new notifications.</p>
-        <?php else: ?>
-            <?php foreach ($notifications as $notification): ?>
-                <div class="notification">
-                    <p><?= htmlspecialchars($notification['message']) ?> (By <?= htmlspecialchars($notification['follower_email']) ?>)</p>
-                    <span class="timestamp"><?= htmlspecialchars($notification['created_at']) ?></span>
-                    <form method="POST" action="">
-                        <button type="submit" name="follow" class="follow-button">Follow Back</button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
         <?php endif; ?>
     </div>
 
