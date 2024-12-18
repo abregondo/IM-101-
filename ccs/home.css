@@ -159,6 +159,7 @@ header .header-right button {
 }
 .comment-section textarea {
   width: 95%;
+  position: relative;
 }
 
 .comment-input {
@@ -168,7 +169,6 @@ header .header-right button {
   border-radius: 5px;
   font-size: 1rem;
   margin-bottom: 10px;
-  position:fixed;
 }
 
 .comment-section button {
