@@ -60,8 +60,10 @@ header .header-right button {
   border-radius: 5px;
   font-size: 1rem;
   height: 100px;
-  resize: none; 
+  resize: none;
+  overflow: hidden;
 }
+
 
 .create-post-section button {
   padding: 10px;
