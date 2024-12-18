@@ -189,6 +189,17 @@ header .header-right button {
   font-size: 0.9rem;
 }
 
+.comment-avatar {
+  width: 30px; /* Adjust as needed for smaller size in comments */
+  height: 30px; /* Same as width to maintain circular shape */
+  border-radius: 50%; /* Ensures the image is circular */
+  object-fit: cover; /* Fits the image properly within the circle */
+  border: 1px solid #ccc; /* Optional border for better aesthetics */
+  margin-right: 10px; /* Adds space between the avatar and the text */
+  display: inline-block; /* Ensures proper alignment with the text */
+  vertical-align: middle; /* Aligns with the text in the comment */
+}
+
 .comment-count {
   margin-top: 5px;
   font-size: 0.9rem;
