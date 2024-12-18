@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         form {
             background-color: #fff;
             padding: 30px;
-            border: 1px solid #ccc; /* Added border sa form */
+            border: 1px solid #ccc; 
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
             width: 100%;
@@ -124,7 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-decoration: underline;
         }
 
-        /* Media query for responsiveness */
         @media only screen and (max-width: 430px) {
             form {
                 width: 90%;
@@ -163,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <button type="submit">Sign In</button>
 
-    <p class="create-account">Don't have an account? <a href="create_account.php">Create Account</a></p> <!-- Create Account link inside the form -->
+    <p class="create-account">Don't have an account? <a href="create_account.php">Create Account</a></p> 
 </form>
 
 </body>

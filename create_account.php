@@ -58,12 +58,12 @@ body {
 form {
     background-color: #fff;
     padding: 30px;
-    border: 1px solid #ccc; /* Added border around form */
+    border: 1px solid #ccc; 
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Shadow to make form stand out */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
     width: 100%;
     max-width: 400px;
-    text-align: left; /* Align text to the left */
+    text-align: left; 
 }
 
 /* Form title styling */
@@ -72,7 +72,7 @@ h2 {
     color: #333;
     margin-bottom: 20px;
     font-weight: 600;
-    text-align: center; /* Center the title */
+    text-align: center;
 }
 
 /* Label and input container styling */
@@ -94,12 +94,12 @@ input[type="email"],
 input[type="password"] {
     width: 100%;
     padding: 12px;
-    margin: 0 0 15px 0; /* Equal margin only at bottom */
+    margin: 0 0 15px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
     outline: none;
-    box-sizing: border-box; /* Include padding and border in total width */
+    box-sizing: border-box; 
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
