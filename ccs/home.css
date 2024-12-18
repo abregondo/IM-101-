@@ -36,10 +36,10 @@ header .header-right button {
 
 /* Create Post Section */
 .create-post-section {
-  position: relative; /* Changed from fixed to relative */
-  margin: 20px auto; /* Centered the section */
-  width: 90%; /* Adjust width as needed */
-  max-width: 600px; /* Limit maximum width */
+  position: relative; 
+  margin: 20px auto; 
+  width: 90%; 
+  max-width: 600px;
   background-color: white;
   padding: 15px;
   border-radius: 8px;
