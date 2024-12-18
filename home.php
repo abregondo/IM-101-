@@ -46,7 +46,7 @@ $posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch comments for each post
 $comments_query = "SELECT c.id AS comment_id, c.content AS comment_content, c.created_at AS comment_created_at, 
-                          u.email AS commenter_username, u.profile_picture AS commenter_picture, c.post_id
+                          u.username AS commenter_username, u.profile_picture AS commenter_picture, c.post_id
                    FROM comments c
                    INNER JOIN users u ON c.user_id = u.id
                    ORDER BY c.created_at ASC";
