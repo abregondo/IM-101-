@@ -34,12 +34,6 @@ if (!$user) {
     exit();
 }
 
-// Fetch the logged-in user's email
-$user_email_query = "SELECT email FROM users WHERE id = :user_id";
-$user_email_stmt = $pdo->prepare($user_email_query);
-$user_email_stmt->execute(['user_id' => $_SESSION['user_id']]);
-$user_email = $user_email_stmt->fetchColumn();
-
 // Fetch posts by the user
 $posts_query = "SELECT 
                     id AS post_id, 
@@ -72,14 +66,18 @@ if (isset($_POST['follow'])) {
         $follow_stmt = $pdo->prepare($follow_query);
         $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
 
-        // Insert notification for the followed user
-        $notification_message = "User " . htmlspecialchars($user_email) . " has followed you.";
-        $notification_query = "INSERT INTO notifications (user_id, type, message) 
-                               VALUES (:user_id, 'follow', :message)";
+        // Insert notification about following
+        $notification_message = $_SESSION['user_id'] . " followed you."; // Customize the notification message as needed
+        $notification_type = 'follow'; // Set the notification type
+
+        // Insert the notification into the database (including the 'type' column)
+        $notification_query = "INSERT INTO notifications (user_id, message, type) 
+                               VALUES (:user_id, :message, :type)";
         $notification_stmt = $pdo->prepare($notification_query);
         $notification_stmt->execute([
             'user_id' => $user_id, // The user being followed
-            'message' => $notification_message
+            'message' => $notification_message,
+            'type' => $notification_type // Notification type
         ]);
     }
 
