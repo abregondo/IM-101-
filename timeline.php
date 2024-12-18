@@ -46,45 +46,6 @@ $posts_query = "SELECT
 $posts_stmt = $pdo->prepare($posts_query);
 $posts_stmt->execute(['user_id' => $user_id]);
 $user_posts = $posts_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Handle follow/unfollow actions
-if (isset($_POST['follow_action'])) {
-    if ($_POST['follow_action'] == 'follow') {
-        // Add follow relationship
-        $follow_query = "INSERT INTO follows (follower_id, followed_id) VALUES (:follower_id, :followed_id)";
-        $follow_stmt = $pdo->prepare($follow_query);
-        $follow_stmt->execute([
-            'follower_id' => $_SESSION['user_id'],
-            'followed_id' => $user_id
-        ]);
-
-        // Add a notification for the followed user
-        $notification_message = "User " . htmlspecialchars($_SESSION['user_id']) . " has started following you.";
-        $notification_query = "INSERT INTO notifications (user_id, message) VALUES (:user_id, :message)";
-        $notification_stmt = $pdo->prepare($notification_query);
-        $notification_stmt->execute([
-            'user_id' => $user_id,
-            'message' => $notification_message
-        ]);
-    } elseif ($_POST['follow_action'] == 'unfollow') {
-        // Remove follow relationship
-        $unfollow_query = "DELETE FROM follows WHERE follower_id = :follower_id AND followed_id = :followed_id";
-        $unfollow_stmt = $pdo->prepare($unfollow_query);
-        $unfollow_stmt->execute([
-            'follower_id' => $_SESSION['user_id'],
-            'followed_id' => $user_id
-        ]);
-    }
-}
-
-// Check if the logged-in user is following the displayed user
-$is_following_query = "SELECT 1 FROM follows WHERE follower_id = :follower_id AND followed_id = :followed_id";
-$is_following_stmt = $pdo->prepare($is_following_query);
-$is_following_stmt->execute([
-    'follower_id' => $_SESSION['user_id'],
-    'followed_id' => $user_id
-]);
-$is_following = $is_following_stmt->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -93,9 +54,10 @@ $is_following = $is_following_stmt->fetchColumn();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($user['email']) ?>'s Timeline</title>
-    <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="ccs/timeline.css">
 </head>
 <body>
+    <!-- Header Section -->
     <header>
         <div class="header-left">
             <a href="home.php" class="back-link">&larr; Back to Home</a>
@@ -107,25 +69,18 @@ $is_following = $is_following_stmt->fetchColumn();
         </div>
     </header>
 
+    <!-- Profile Section -->
     <div class="profile-section">
         <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture" class="profile-avatar">
         <h2><?= htmlspecialchars($user['email']) ?></h2>
 
-        <?php if ($_SESSION['user_id'] != $user_id): ?>
-            <form method="POST" action="">
-                <button 
-                    type="submit" 
-                    name="follow_action" 
-                    value="<?= $is_following ? 'unfollow' : 'follow' ?>" 
-                    class="follow-button">
-                    <?= $is_following ? 'Unfollow' : 'Follow' ?>
-                </button>
-            </form>
-        <?php else: ?>
+        <!-- Edit Profile (Only if the logged-in user is viewing their own timeline) -->
+        <?php if ($_SESSION['user_id'] == $user_id): ?>
             <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
         <?php endif; ?>
     </div>
 
+    <!-- User Posts Section -->
     <div class="user-posts">
         <?php if (empty($user_posts)): ?>
             <p>This user has not made any posts yet.</p>
