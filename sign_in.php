@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         input[type="email"],
         input[type="password"] {
-            width: 100%;
+            width: 95%;
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
