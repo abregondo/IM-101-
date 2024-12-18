@@ -157,6 +157,9 @@ header .header-right button {
   margin-top: 10px;
   display: none;
 }
+.comment-section textarea {
+  width: 95%;
+}
 
 .comment-input {
   width: 100%;
