@@ -128,7 +128,7 @@ foreach ($comments as $comment) {
                 <?php foreach ($comments_by_post[$post['post_id']] as $comment): ?>
                   <div class="comment">
                     <img src="<?= htmlspecialchars($comment['commenter_picture']) ?>" alt="User" class="comment-avatar">
-                    <strong><?= htmlspecialchars($comment['commenter_email']) ?></strong>
+                    <strong><?= htmlspecialchars($comment['commenter_username']) ?></strong>
                     <p><?= htmlspecialchars($comment['comment_content']) ?></p>
                     <span class="timestamp"><?= htmlspecialchars($comment['comment_created_at']) ?></span>
                   </div>
