@@ -46,6 +46,37 @@ $posts_query = "SELECT
 $posts_stmt = $pdo->prepare($posts_query);
 $posts_stmt->execute(['user_id' => $user_id]);
 $user_posts = $posts_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Handle follow/unfollow action
+if (isset($_POST['follow'])) {
+    // Check if the logged-in user is following the current user
+    $follow_query = "SELECT * FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
+    $follow_stmt = $pdo->prepare($follow_query);
+    $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
+    $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($is_following) {
+        // Unfollow: Delete from followers table
+        $unfollow_query = "DELETE FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
+        $unfollow_stmt = $pdo->prepare($unfollow_query);
+        $unfollow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
+    } else {
+        // Follow: Insert into followers table
+        $follow_query = "INSERT INTO followers (follower_id, following_id) VALUES (:logged_in_user_id, :user_id)";
+        $follow_stmt = $pdo->prepare($follow_query);
+        $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
+    }
+
+    // Reload the page to reflect the change
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit();
+}
+
+// Check if the logged-in user is following the current user
+$follow_query = "SELECT * FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
+$follow_stmt = $pdo->prepare($follow_query);
+$follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
+$is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -77,6 +108,13 @@ $user_posts = $posts_stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Edit Profile (Only if the logged-in user is viewing their own timeline) -->
         <?php if ($_SESSION['user_id'] == $user_id): ?>
             <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
+        <?php else: ?>
+            <!-- Follow/Unfollow Button -->
+            <form method="POST" action="">
+                <button type="submit" name="follow" class="follow-button">
+                    <?= $is_following ? 'Unfollow' : 'Follow' ?>
+                </button>
+            </form>
         <?php endif; ?>
     </div>
 

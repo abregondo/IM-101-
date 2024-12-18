@@ -50,6 +50,26 @@ header .back-link:hover {
   color: #333;
 }
 
+/* Follow Button */
+.follow-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.follow-button:hover {
+  background-color: #0056b3;
+}
+
+.follow-button:focus {
+  outline: none;
+}
+
 /* User Posts Section */
 .user-posts {
   max-width: 600px;
