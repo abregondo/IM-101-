@@ -156,19 +156,15 @@ try {
                 </button>
             </form>
         <?php else: ?>
-            <!-- Edit Profile Button for Logged-In Users Viewing Their Own Profile -->
+            <!-- Show Profile Picture Update Form for Logged-In User Viewing Their Own Profile -->
+            <h3>Edit Your Profile Picture</h3>
             <form method="POST" action="" enctype="multipart/form-data">
-                <button type="submit" name="edit_profile" class="edit-profile-button">Edit Profile</button>
-            </form>
-
-            <!-- Profile Picture Update Form -->
-            <form method="POST" action="" enctype="multipart/form-data">
-                <h3>Change Profile Picture</h3>
-                <input type="file" name="profile_picture">
+                <label for="profile_picture">Upload a new profile picture:</label>
+                <input type="file" name="profile_picture" id="profile_picture">
                 <button type="submit" name="update_profile_picture">Update Profile Picture</button>
             </form>
 
-            <!-- Remove Profile Picture Button -->
+            <!-- Remove Profile Picture -->
             <form method="POST" action="">
                 <button type="submit" name="remove_profile_picture">Remove Profile Picture</button>
             </form>
