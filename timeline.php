@@ -99,7 +99,7 @@ try {
     <title><?= htmlspecialchars($user['email']) ?>'s Timeline</title>
     
     <!-- Update the CSS link path -->
-    <link rel="stylesheet" href="/IM-101-/css/timeline.css">
+    <link rel="stylesheet" href="weh.css">
     
     <!-- Inline Style for Debugging -->
     <style>

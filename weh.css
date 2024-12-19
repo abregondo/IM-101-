@@ -1,0 +1,129 @@
+/* General Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Header */
+  header {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  header .back-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  header .back-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Profile Section */
+  .profile-section {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    margin: 20px auto;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-section img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .profile-section h2 {
+    font-size: 20px;
+    color: #333;
+  }
+  
+  /* Follow Button */
+  .follow-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  
+  .follow-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .follow-button:focus {
+    outline: none;
+  }
+  
+  /* User Posts Section */
+  .user-posts {
+    max-width: 600px;
+    margin: 0 auto 20px;
+  }
+  
+  .post {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-content {
+    font-size: 14px;
+    color: #555;
+    margin: 10px 0;
+  }
+  
+  .timestamp {
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+  }
+  
+  .post-actions {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .like-count {
+    color: #e0245e;
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #0084ff;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  footer a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  }
+  
