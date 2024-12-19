@@ -124,7 +124,6 @@ try {
     <header>
         <div class="header-left">
             <a href="home.php" class="back-link">&larr; Back to Home</a>
-            <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
         </div>
         <div class="header-right">
             <form method="POST" action="">
@@ -140,6 +139,8 @@ try {
         <div class="follow-stats">
             <p><strong>Followers:</strong> <?= $followers_count ?></p>
             <p><strong>Following:</strong> <?= $following_count ?></p>
+            <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
+
         </div>
 
         <!-- Show Follow Button ONLY if the logged-in user is viewing someone else's profile and is NOT user_id = 2 -->
