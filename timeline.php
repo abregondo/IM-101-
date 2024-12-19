@@ -69,7 +69,7 @@ try {
     $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
     $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Handle follow/unfollow action
+    // Handle follow/unfollow action for logged-in users
     if (isset($_POST['follow'])) {
         if ($is_following) {
             // Unfollow
@@ -148,7 +148,7 @@ try {
             <p><strong>Following:</strong> <?= $following_count ?></p>
         </div>
 
-        <!-- Show Follow Button for Non-Logged-In Users or Non-Followed Users -->
+        <!-- Show Follow Button ONLY if the logged-in user is viewing someone else's profile -->
         <?php if ($_SESSION['user_id'] !== $user_id): ?>
             <form method="POST" action="">
                 <button type="submit" name="follow" class="follow-button">
