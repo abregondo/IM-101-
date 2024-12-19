@@ -2,6 +2,14 @@
 session_start();
 include('db.php'); // Include the database connection
 
+// Check if the user wants to sign out
+if (isset($_POST['sign_out'])) {
+    // Destroy the session to log out the user
+    session_destroy();
+    header("Location: sign_in.php");
+    exit();
+}
+
 // Ensure user is logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: sign_in.php');
@@ -142,7 +150,7 @@ try {
             <!-- Remove Follow button for the logged-in user's profile -->
             <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
         <?php else: ?>
-            <!-- Do not show Follow button for the logged-in user, show Follow button for others -->
+            <!-- Show Follow button for other users' profiles -->
             <form method="POST" action="">
                 <button type="submit" name="follow" class="follow-button">
                     <?= $is_following ? 'Unfollow' : 'Follow' ?>
