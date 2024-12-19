@@ -69,8 +69,8 @@ try {
     $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
     $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Handle follow/unfollow action
-    if (isset($_POST['follow'])) {
+    // Handle follow/unfollow action, but prevent following oneself
+    if (isset($_POST['follow']) && $_SESSION['user_id'] !== $user_id) { // Prevent self-follow
         if ($is_following) {
             // Unfollow
             $unfollow_query = "DELETE FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
@@ -85,6 +85,34 @@ try {
         header("Location: " . $_SERVER['REQUEST_URI']);
         exit();
     }
+
+    // Handle profile picture update or removal
+    if (isset($_POST['update_profile_picture'])) {
+        if (isset($_FILES['profile_picture'])) {
+            // Handle file upload (e.g., profile picture)
+            $upload_dir = 'uploads/profile_pictures/';
+            $upload_file = $upload_dir . basename($_FILES['profile_picture']['name']);
+
+            // Move uploaded file to the designated directory
+            if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $upload_file)) {
+                $update_pic_query = "UPDATE users SET profile_picture = :profile_picture WHERE id = :user_id";
+                $update_pic_stmt = $pdo->prepare($update_pic_query);
+                $update_pic_stmt->execute(['profile_picture' => $upload_file, 'user_id' => $user_id]);
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit();
+            } else {
+                echo "Error uploading file.";
+            }
+        } else if (isset($_POST['remove_profile_picture'])) {
+            // Remove the profile picture
+            $update_pic_query = "UPDATE users SET profile_picture = NULL WHERE id = :user_id";
+            $update_pic_stmt = $pdo->prepare($update_pic_query);
+            $update_pic_stmt->execute(['user_id' => $user_id]);
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit();
+        }
+    }
+
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     exit();
@@ -97,16 +125,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($user['email']) ?>'s Timeline</title>
-    
-    <!-- Update the CSS link path -->
     <link rel="stylesheet" href="weh.css">
-    
-    <!-- Inline Style for Debugging -->
-    <style>
-        body {
-            background-color: lightgray; /* Temporary testing */
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -129,8 +148,20 @@ try {
             <p><strong>Following:</strong> <?= $following_count ?></p>
         </div>
 
+        <?php if ($_SESSION['user_id'] === $user_id): ?>
+            <!-- Profile Picture Update Form -->
+            <form method="POST" action="" enctype="multipart/form-data">
+                <input type="file" name="profile_picture">
+                <button type="submit" name="update_profile_picture">Update Profile Picture</button>
+            </form>
+            <!-- Remove Profile Picture Button -->
+            <form method="POST" action="">
+                <button type="submit" name="remove_profile_picture">Remove Profile Picture</button>
+            </form>
+        <?php endif; ?>
+
         <form method="POST" action="">
-            <button type="submit" name="follow" class="follow-button">
+            <button type="submit" name="follow" class="follow-button" <?= ($_SESSION['user_id'] === $user_id) ? 'disabled' : '' ?>>
                 <?= $is_following ? 'Unfollow' : 'Follow' ?>
             </button>
         </form>
@@ -152,6 +183,5 @@ try {
         <?php endif; ?>
     </div>
 
-   
 </body>
 </html>
