@@ -148,8 +148,8 @@ try {
             <p><strong>Following:</strong> <?= $following_count ?></p>
         </div>
 
-        <!-- Show Follow Button ONLY if the logged-in user is viewing someone else's profile -->
-        <?php if ($_SESSION['user_id'] !== $user_id): ?>
+        <!-- Show Follow Button ONLY if the logged-in user is viewing someone else's profile and is NOT user_id = 2 -->
+        <?php if ($_SESSION['user_id'] !== $user_id && $_SESSION['user_id'] != 2): ?>
             <form method="POST" action="">
                 <button type="submit" name="follow" class="follow-button">
                     <?= $is_following ? 'Unfollow' : 'Follow' ?>
