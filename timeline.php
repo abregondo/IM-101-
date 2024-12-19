@@ -12,6 +12,13 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Handle sign out
+if (isset($_POST['sign_out'])) {
+    session_destroy();
+    header('Location: sign_in.php');
+    exit();
+}
+
 // Check if user_id is provided in the URL
 if (!isset($_GET['user_id'])) {
     echo "User ID is not provided.";
@@ -139,11 +146,14 @@ try {
         <div class="follow-stats">
             <p><strong>Followers:</strong> <?= $followers_count ?></p>
             <p><strong>Following:</strong> <?= $following_count ?></p>
-            <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
-
         </div>
 
-        <!-- Show Follow Button ONLY if the logged-in user is viewing someone else's profile and is NOT user_id = 2 -->
+        <!-- Show Edit Profile Link ONLY if the logged-in user is viewing their own profile -->
+        <?php if ($_SESSION['user_id'] === $user_id): ?>
+            <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
+        <?php endif; ?>
+
+        <!-- Show Follow Button ONLY if the logged-in user is viewing someone else's profile -->
         <?php if ($_SESSION['user_id'] !== $user_id && $_SESSION['user_id'] != 2): ?>
             <form method="POST" action="">
                 <button type="submit" name="follow" class="follow-button">
