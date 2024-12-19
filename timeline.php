@@ -12,13 +12,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Handle sign out
-if (isset($_POST['sign_out'])) {
-    session_destroy();
-    header('Location: sign_in.php');
-    exit();
-}
-
 // Check if user_id is provided in the URL
 if (!isset($_GET['user_id'])) {
     echo "User ID is not provided.";
@@ -131,6 +124,7 @@ try {
     <header>
         <div class="header-left">
             <a href="home.php" class="back-link">&larr; Back to Home</a>
+            <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
         </div>
         <div class="header-right">
             <form method="POST" action="">
@@ -154,19 +148,6 @@ try {
                 <button type="submit" name="follow" class="follow-button">
                     <?= $is_following ? 'Unfollow' : 'Follow' ?>
                 </button>
-            </form>
-        <?php else: ?>
-            <!-- Show Profile Picture Update Form for Logged-In User Viewing Their Own Profile -->
-            <h3>Edit Your Profile Picture</h3>
-            <form method="POST" action="" enctype="multipart/form-data">
-                <label for="profile_picture">Upload a new profile picture:</label>
-                <input type="file" name="profile_picture" id="profile_picture">
-                <button type="submit" name="update_profile_picture">Update Profile Picture</button>
-            </form>
-
-            <!-- Remove Profile Picture -->
-            <form method="POST" action="">
-                <button type="submit" name="remove_profile_picture">Remove Profile Picture</button>
             </form>
         <?php endif; ?>
     </div>
