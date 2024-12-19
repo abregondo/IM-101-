@@ -26,19 +26,6 @@ header .back-link:hover {
   text-decoration: underline;
 }
 
-header .sign-out-button {
-  background-color: red;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-header .sign-out-button:hover {
-  background-color: darkred;
-}
-
 /* Profile Section */
 .profile-section {
   text-align: center;
@@ -61,15 +48,6 @@ header .sign-out-button:hover {
 .profile-section h2 {
   font-size: 20px;
   color: #333;
-}
-
-.follow-stats {
-  margin-top: 15px;
-}
-
-.follow-stats p {
-  font-size: 16px;
-  color: #555;
 }
 
 /* Follow Button */
@@ -126,12 +104,11 @@ header .sign-out-button:hover {
 
 .like-count {
   color: #e0245e;
-  font-weight: bold;
 }
 
 /* Footer */
 footer {
-  background-color: black;
+  background-color: #0084ff;
   color: white;
   text-align: center;
   padding: 10px;
