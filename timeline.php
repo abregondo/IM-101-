@@ -97,8 +97,16 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($user['email']) ?>'s Timeline</title>
+    
+    <!-- Update the CSS link path -->
     <link rel="stylesheet" href="/IM-101-/css/timeline.css">
-
+    
+    <!-- Inline Style for Debugging -->
+    <style>
+        body {
+            background-color: lightgray; /* Temporary testing */
+        }
+    </style>
 </head>
 <body>
     <header>
