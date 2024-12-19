@@ -119,7 +119,7 @@ try {
         </div>
 
         <!-- Show Edit Profile Link ONLY if the logged-in user is viewing their own profile -->
-        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] !== $user['id']):?>
+        <?php if (isset($_SESSION['users_id']) && $_SESSION['users_id'] !== $users['id']):?>
             <!-- Display Edit Profile link for logged-in user -->
             <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
         <?php else: ?>
