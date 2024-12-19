@@ -152,8 +152,6 @@ try {
         <?php endif; ?>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Your Website | <a href="#">Privacy</a> | <a href="#">Terms</a></p>
-    </footer>
+   
 </body>
 </html>
