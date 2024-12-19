@@ -142,7 +142,7 @@ try {
             <!-- Remove Follow button for the logged-in user's profile -->
             <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
         <?php else: ?>
-            <!-- Show Follow button for other users -->
+            <!-- Do not show Follow button for the logged-in user, show Follow button for others -->
             <form method="POST" action="">
                 <button type="submit" name="follow" class="follow-button">
                     <?= $is_following ? 'Unfollow' : 'Follow' ?>
