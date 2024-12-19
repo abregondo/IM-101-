@@ -2,10 +2,6 @@
 session_start();
 include('db.php'); // Include the database connection
 
-// Enable error reporting
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 // Ensure user is logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: sign_in.php');
@@ -154,7 +150,7 @@ try {
         <?php endif; ?>
 
         <!-- Show Follow Button ONLY if the logged-in user is viewing someone else's profile -->
-        <?php if ($_SESSION['user_id'] !== $user_id && $_SESSION['user_id'] != 2): ?>
+        <?php if ($_SESSION['user_id'] !== $user_id): ?>
             <form method="POST" action="">
                 <button type="submit" name="follow" class="follow-button">
                     <?= $is_following ? 'Unfollow' : 'Follow' ?>
