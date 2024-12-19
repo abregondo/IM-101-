@@ -141,7 +141,8 @@ try {
         <?php if ($_SESSION['user_id'] === $user_id): ?>
             <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
         <?php else: ?>
-            <!-- Show Follow Button ONLY if the logged-in user is viewing someone else's profile -->
+            <!-- Do not display the follow button for the logged-in user -->
+            <!-- The button is removed from the profile of the logged-in user -->
             <form method="POST" action="">
                 <button type="submit" name="follow" class="follow-button">
                     <?= $is_following ? 'Unfollow' : 'Follow' ?>
