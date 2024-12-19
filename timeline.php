@@ -63,29 +63,6 @@ try {
     $following_stmt->execute(['user_id' => $user_id]);
     $following_count = $following_stmt->fetch(PDO::FETCH_ASSOC)['following_count'];
 
-    // Check if the logged-in user is following the current user
-    $follow_query = "SELECT * FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
-    $follow_stmt = $pdo->prepare($follow_query);
-    $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
-    $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Handle follow/unfollow action, but prevent following oneself
-    if (isset($_POST['follow']) && $_SESSION['user_id'] !== $user_id) { // Prevent self-follow
-        if ($is_following) {
-            // Unfollow
-            $unfollow_query = "DELETE FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
-            $unfollow_stmt = $pdo->prepare($unfollow_query);
-            $unfollow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
-        } else {
-            // Follow
-            $follow_query = "INSERT INTO followers (follower_id, following_id) VALUES (:logged_in_user_id, :user_id)";
-            $follow_stmt = $pdo->prepare($follow_query);
-            $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
-        }
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit();
-    }
-
     // Handle profile picture update or removal
     if (isset($_POST['update_profile_picture'])) {
         if (isset($_FILES['profile_picture'])) {
@@ -140,7 +117,7 @@ try {
     </header>
 
     <div class="profile-section">
-        <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture" class="profile-avatar">
+        <img src="<?= htmlspecialchars($user['profile_picture']) ? htmlspecialchars($user['profile_picture']) : 'default-profile.png' ?>" alt="Profile Picture" class="profile-avatar">
         <h2><?= htmlspecialchars($user['email']) ?></h2>
 
         <div class="follow-stats">
@@ -149,22 +126,24 @@ try {
         </div>
 
         <?php if ($_SESSION['user_id'] === $user_id): ?>
+            <!-- Edit Profile Form -->
+            <form method="POST" action="" enctype="multipart/form-data">
+                <button type="submit" name="edit_profile" class="edit-profile-button">Edit Profile</button>
+            </form>
+
             <!-- Profile Picture Update Form -->
             <form method="POST" action="" enctype="multipart/form-data">
+                <h3>Change Profile Picture</h3>
                 <input type="file" name="profile_picture">
                 <button type="submit" name="update_profile_picture">Update Profile Picture</button>
             </form>
+
             <!-- Remove Profile Picture Button -->
             <form method="POST" action="">
                 <button type="submit" name="remove_profile_picture">Remove Profile Picture</button>
             </form>
         <?php endif; ?>
 
-        <form method="POST" action="">
-            <button type="submit" name="follow" class="follow-button" <?= ($_SESSION['user_id'] === $user_id) ? 'disabled' : '' ?>>
-                <?= $is_following ? 'Unfollow' : 'Follow' ?>
-            </button>
-        </form>
     </div>
 
     <div class="user-posts">
