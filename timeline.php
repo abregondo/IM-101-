@@ -8,13 +8,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Handle sign out
-if (isset($_POST['sign_out'])) {
-    session_destroy();
-    header('Location: sign_in.php');
-    exit();
-}
-
 // Check if user_id is provided in the URL
 if (!isset($_GET['user_id'])) {
     echo "User ID is not provided.";
