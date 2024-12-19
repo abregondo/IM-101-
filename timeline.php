@@ -83,33 +83,6 @@ try {
         exit();
     }
 
-    // Handle profile picture update or removal
-    if (isset($_POST['update_profile_picture'])) {
-        if (isset($_FILES['profile_picture'])) {
-            // Handle file upload (e.g., profile picture)
-            $upload_dir = 'uploads/profile_pictures/';
-            $upload_file = $upload_dir . basename($_FILES['profile_picture']['name']);
-
-            // Move uploaded file to the designated directory
-            if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $upload_file)) {
-                $update_pic_query = "UPDATE users SET profile_picture = :profile_picture WHERE id = :user_id";
-                $update_pic_stmt = $pdo->prepare($update_pic_query);
-                $update_pic_stmt->execute(['profile_picture' => $upload_file, 'user_id' => $user_id]);
-                header("Location: " . $_SERVER['REQUEST_URI']);
-                exit();
-            } else {
-                echo "Error uploading file.";
-            }
-        } else if (isset($_POST['remove_profile_picture'])) {
-            // Remove the profile picture
-            $update_pic_query = "UPDATE users SET profile_picture = NULL WHERE id = :user_id";
-            $update_pic_stmt = $pdo->prepare($update_pic_query);
-            $update_pic_stmt->execute(['user_id' => $user_id]);
-            header("Location: " . $_SERVER['REQUEST_URI']);
-            exit();
-        }
-    }
-
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     exit();
@@ -147,7 +120,7 @@ try {
 
         <!-- Show Edit Profile Link ONLY if the logged-in user is viewing their own profile -->
         <?php if ($_SESSION['user_id'] === $user_id): ?>
-            <!-- Remove Follow button for the logged-in user's profile -->
+            <!-- Display Edit Profile button for logged-in user -->
             <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
         <?php else: ?>
             <!-- Show Follow button for other users' profiles -->
