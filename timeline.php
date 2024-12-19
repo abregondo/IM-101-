@@ -60,29 +60,6 @@ try {
     $following_stmt->execute(['user_id' => $user_id]);
     $following_count = $following_stmt->fetch(PDO::FETCH_ASSOC)['following_count'];
 
-    // Check if the logged-in user is following the current user
-    $follow_query = "SELECT * FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
-    $follow_stmt = $pdo->prepare($follow_query);
-    $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
-    $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Handle follow/unfollow action for logged-in users
-    if (isset($_POST['follow'])) {
-        if ($is_following) {
-            // Unfollow
-            $unfollow_query = "DELETE FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
-            $unfollow_stmt = $pdo->prepare($unfollow_query);
-            $unfollow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
-        } else {
-            // Follow
-            $follow_query = "INSERT INTO followers (follower_id, following_id) VALUES (:logged_in_user_id, :user_id)";
-            $follow_stmt = $pdo->prepare($follow_query);
-            $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
-        }
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit();
-    }
-
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     exit();
@@ -118,18 +95,8 @@ try {
             <p><strong>Following:</strong> <?= $following_count ?></p>
         </div>
 
-        <!-- Show Edit Profile Link ONLY if the logged-in user is viewing their own profile -->
-        <?php if ($_SESSION['user_id'] !== $user_id): ?>
-            <!-- Display Edit Profile button for logged-in user -->
-            <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
-        <?php else: ?>
-            <!-- Show Follow button for other users' profiles -->
-            <form method="POST" action="">
-                <button type="submit" name="follow" class="follow-button">
-                    <?= $is_following ? 'Unfollow' : 'Follow' ?>
-                </button>
-            </form>
-        <?php endif; ?>
+        <!-- Show Edit Profile Link for all users -->
+        <a href="edit_profile.php" class="edit-profile-link">Edit Profile</a>
     </div>
 
     <div class="user-posts">
