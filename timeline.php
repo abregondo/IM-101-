@@ -63,6 +63,29 @@ try {
     $following_stmt->execute(['user_id' => $user_id]);
     $following_count = $following_stmt->fetch(PDO::FETCH_ASSOC)['following_count'];
 
+    // Check if the logged-in user is following the current user
+    $follow_query = "SELECT * FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
+    $follow_stmt = $pdo->prepare($follow_query);
+    $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
+    $is_following = $follow_stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Handle follow/unfollow action
+    if (isset($_POST['follow'])) {
+        if ($is_following) {
+            // Unfollow
+            $unfollow_query = "DELETE FROM followers WHERE follower_id = :logged_in_user_id AND following_id = :user_id";
+            $unfollow_stmt = $pdo->prepare($unfollow_query);
+            $unfollow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
+        } else {
+            // Follow
+            $follow_query = "INSERT INTO followers (follower_id, following_id) VALUES (:logged_in_user_id, :user_id)";
+            $follow_stmt = $pdo->prepare($follow_query);
+            $follow_stmt->execute(['logged_in_user_id' => $_SESSION['user_id'], 'user_id' => $user_id]);
+        }
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
+
     // Handle profile picture update or removal
     if (isset($_POST['update_profile_picture'])) {
         if (isset($_FILES['profile_picture'])) {
@@ -125,8 +148,15 @@ try {
             <p><strong>Following:</strong> <?= $following_count ?></p>
         </div>
 
-        <?php if ($_SESSION['user_id'] === $user_id): ?>
-            <!-- Edit Profile Form -->
+        <!-- Show Follow Button for Non-Logged-In Users or Non-Followed Users -->
+        <?php if ($_SESSION['user_id'] !== $user_id): ?>
+            <form method="POST" action="">
+                <button type="submit" name="follow" class="follow-button">
+                    <?= $is_following ? 'Unfollow' : 'Follow' ?>
+                </button>
+            </form>
+        <?php else: ?>
+            <!-- Edit Profile Button for Logged-In Users Viewing Their Own Profile -->
             <form method="POST" action="" enctype="multipart/form-data">
                 <button type="submit" name="edit_profile" class="edit-profile-button">Edit Profile</button>
             </form>
@@ -143,7 +173,6 @@ try {
                 <button type="submit" name="remove_profile_picture">Remove Profile Picture</button>
             </form>
         <?php endif; ?>
-
     </div>
 
     <div class="user-posts">
